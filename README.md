@@ -23,7 +23,7 @@ I have decided not to include user stories in the requirements analysis, as I ha
 
 The domain model can be found in the [domain_model.md](design/domain_model.md) file.
 
-A very basic usecase diagram to guide the development can be found in the [usecase_diagram.md](design/usecase.md) file.
+A very basic usecase diagram to guide the development can be found in the [usecase.md](design/usecase.md) file.
 
 #### Mockups
 
