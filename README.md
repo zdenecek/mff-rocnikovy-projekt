@@ -56,9 +56,11 @@ The frontend is written in [Vue.js](https://vuejs.org/) (v3).
 
 ## Deploying
 
-The goal is to use docker to automate the deployment process.
+Add a `.env` file to the `backend` directory, you can use the `.env.example` file as a template.
 
-As of now, the deployment process is manual.
+```
+docker compose --env-file ./backend/.env build app
+```
 
 ## Testing
 
