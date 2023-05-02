@@ -26,7 +26,6 @@ The domain model can be found in the [domain_model.md](design/domain_model.md) f
 A very basic usecase diagram to guide the development can be found in the [usecase.md](design/usecase.md) file.
 
 #### Mockups
-
 Figma mockup for the project is being [gradually worked on at this address](https://www.figma.com/file/7viqnEaCt7VbuPwxjV9PUJ/matrikabs?node-id=102%3A644&t=disWhiQWDYSMkD8x-1).
 
 The design is taken over from the official site of bridge in Havířov to keep the design consistent with the rest of the site, the color palette is changed to distinguish the system from the rest of the site.
@@ -40,7 +39,7 @@ The design is not final and is subject to change, especially the color palette.
 
 The project is divided into two parts, the backend and the frontend.
 
-Expectation is that the backend will be augmented by workers to perform tasks, including working with external databases, eg. through scraping even.
+The expectation is that the backend will be augmented by workers to perform tasks, including working with external databases, eg. through scraping even.
 
 For now, both frontend and backend are in the same repository, but this is subject to change.
 
@@ -56,11 +55,34 @@ The frontend is written in [Vue.js](https://vuejs.org/) (v3).
 
 ## Deploying
 
+
 Add a `.env` file to the `backend` directory, you can use the `.env.example` file as a template.
 
 ```
 docker compose --env-file ./backend/.env build app
 ```
+
+```
+docker compose up -d
+```
+
+alternatively, use `--build` to build the image(s) before running the container.
+
+```
+docker compose up -d --build 
+```
+
+To inspect a container, run shell in it:
+```
+docker compose exec [container_name] /bin/bash
+
+```
+
+#### Notes
+
+Do not use 'root' as database username, otherwise the container will not start.
+
+Note that if you are on Windows and use WSL2 for Docker, it is advisable to have the project directory in the WSL2 filesystem, otherwise the performance will be abysmal.
 
 ## Testing
 
