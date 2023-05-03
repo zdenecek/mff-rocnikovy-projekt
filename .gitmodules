@@ -1,3 +1,6 @@
 [submodule "backend"]
 	path = backend
 	url = https://github.com/zdenecek/matrikabs.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/zdenecek/matrikabs-front

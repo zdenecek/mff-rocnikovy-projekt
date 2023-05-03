@@ -1,6 +1,5 @@
 version: "3.7"
 
-
 services:
   app:
     build:
@@ -9,12 +8,12 @@ services:
         uid: 1000
       context: .\backend
       dockerfile: Dockerfile
-    image: matrika
+    image: matrika-back
     container_name: matrika-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
-      - ./:/var/www
+      - ./backend:/var/www/backend
     networks:
       - matrika
 
@@ -31,6 +30,7 @@ services:
       SERVICE_NAME: mysql
     volumes:
       - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - matrika-datavolume:/var/lib/mysql
     networks:
       - matrika
 
@@ -41,7 +41,8 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ./:/var/www
+      - ./frontend/dist:/var/www/frontend/dist
+      - ./backend:/var/www/backend
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - matrika
@@ -49,3 +50,7 @@ services:
 networks:
   matrika:
     driver: bridge
+
+
+volumes:
+  matrika-datavolume:
