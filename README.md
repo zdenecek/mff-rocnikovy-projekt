@@ -41,7 +41,9 @@ The project is divided into two parts, the backend and the frontend.
 
 The expectation is that the backend will be augmented by workers to perform tasks, including working with external databases, eg. through scraping even.
 
-For now, both frontend and backend are in the same repository, but this is subject to change.
+Both frontend and backend can be found in separate repositories and are added to this project as submodules:
+    - [Frontend](https://github.com/zdenecek/matrikabs-front)
+    - [Backend](https://github.com/zdenecek/matrikabs)
 
 ### Backend
 
@@ -51,7 +53,7 @@ The backend is responsible for storing and managing the data and providing an AP
 
 ### Frontend
 
-The frontend is written in [Vue.js](https://vuejs.org/) (v3).
+The frontend is written in [Vue.js](https://vuejs.org/) (v3) using.
 
 ## Deploying
 
