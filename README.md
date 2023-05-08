@@ -91,4 +91,4 @@ Note that if you are on Windows and use WSL2 for Docker, it is advisable to have
 TBD
 
 ## Authors 
-[Zdeněk Tomis](zdenektomis.eu)
+[Zdeněk Tomis](https://zdenektomis.eu)
