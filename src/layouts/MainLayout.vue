@@ -1,6 +1,8 @@
 
 
 <template>
+    <div class="wrapper">
+
     <div class="container main-layout">
         <div class="head">
             <slot name="header" />
@@ -9,7 +11,7 @@
             </div>
         </div>
         <div class="content">
-            <slot />
+            <slot></slot>
         </div>
         <div class="footer">
             <div class="line">
@@ -17,23 +19,26 @@
             </div>
         </div>
     </div>
+</div>
+
 </template>
 
 <style lang="scss" scoped>
 @import "@/style/colors.scss";
 
+.wrapper {
+    padding: 15px 0;
+}
 
 .container {
     width: 960px;
     margin: auto;
-    background: white;
     border-radius: 20px;
     min-height: calc(100vh - 30px);
-    margin-top: 15px;
-    margin-bottom: 15px;
+
+    background-color: white;
     display: flex;
     flex-direction: column;
-
     box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.8);
 }
 
@@ -70,7 +75,7 @@
 
 .content {
     flex-grow: 1;
-    padding: 20px;
+    padding: 10px 20px 60px ; 
 }
 
 .line {
@@ -91,4 +96,6 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 }
+
+
 </style>

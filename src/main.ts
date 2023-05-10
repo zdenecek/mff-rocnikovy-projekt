@@ -6,6 +6,8 @@ import axios from 'axios';
 import { container } from '@/container';
 import { UserServiceContract } from './service/UserServiceContract';
 import { UserRepositoryContract } from './repository/UserRepositoryContract';
+import { TournamentRepositoryContract } from "./repository/TournamentRepositoryContract";
+import { PlayerRepositoryContract } from "./repository/PlayerRepositoryContract";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
@@ -26,6 +28,8 @@ userService.user();
 const dependencies =  {
     userService: container.resolve<UserServiceContract>("UserServiceContract"),
     userRepository: container.resolve<UserRepositoryContract>("UserRepositoryContract"),
+    tournamentRepository: container.resolve<TournamentRepositoryContract>("TournamentRepositoryContract"),
+    playerRepository: container.resolve<PlayerRepositoryContract>("PlayerRepositoryContract"),
 };
 
 createApp(App, dependencies).use(router).mount('#app')

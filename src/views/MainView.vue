@@ -6,21 +6,33 @@
       <h1>Databáze výsledků a hráčů<br>Havířovské Bridžové Akademie</h1>
       <nav>
         <router-link class="nav-link" :to="{ name: 'home' }">
-          <div class="letter">H</div>
+          <div class="letter">D</div>
           <div class="title">
-            Home
+            Domů
           </div>
         </router-link>
-        <router-link class="nav-link" v-show="!isLoggedIn" :to="{ name: 'login' }">
-          <div class="letter">L</div>
+        <router-link class="nav-link" :to="{ name: 'tournaments' }">
+          <div class="letter">T</div>
           <div class="title">
-            Login
+            Turnaje
+          </div>
+        </router-link>
+        <router-link class="nav-link" :to="{ name: 'players' }">
+          <div class="letter">H</div>
+          <div class="title">
+            Hráči
+          </div>
+        </router-link>
+        <router-link class="nav-link" @click="update" v-show="!isLoggedIn" :to="{ name: 'login' }">
+          <div class="letter">P</div>
+          <div class="title">
+            Přihlásit
           </div>
         </router-link>
         <router-link class="nav-link" v-show="isLoggedIn" :to="{ name: 'logout' }">
-          <div class="letter">L</div>
+          <div class="letter">O</div>
           <div class="title">
-            Logout
+            Odhlásit
           </div>
         </router-link>
         <router-link class="nav-link" v-show="isAdmin" :to="{ name: 'admin' }">
@@ -32,10 +44,15 @@
       </nav>
     </template>
     <template #footer-line>
-      © Bridžový spolek Havířov, 2014 - {{ thisYear  }}; IČO: 26585995; číslo účtu: 2300926146/2010
+      © Bridžový spolek Havířov, 2014 - {{ thisYear }}; IČO: 26585995; číslo účtu: 2300926146/2010
     </template>
     <template #default>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
+
     </template>
   </main-layout>
 </template>
@@ -54,10 +71,9 @@ export default defineComponent({
     let isAdmin = ref(false);
     const userService = inject("userService") as UserServiceContract;
 
-    async function update()  {
+    async function update() {
       isLoggedIn.value = await userService.isLoggedIn();
       isAdmin.value = (await userService.user())?.isAdmin() ?? false;
-      console.log("update", isLoggedIn, isAdmin);
     }
     userService.userStatusChanged.sub(update);
     update();
@@ -68,13 +84,28 @@ export default defineComponent({
     return {
       isLoggedIn,
       isAdmin,
-      thisYear
+      thisYear,
+      update
     }
   },
 
 })
 </script>
 
-<style scoped lang="scss">
-@import "@/style/nav.scss";
+<style lang="scss">
+.head {
+
+  @import "@/style/nav.scss";
+}
+
+.content {
+
+  h1 {
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+}
 </style>

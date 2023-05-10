@@ -8,9 +8,9 @@ class User {
     email?: string;
     role?: unknown;
 
-    constructor(params: any) {
+    constructor(params: User) {
         Object.assign(this, params);
-      }
+    }
 
     isAdmin(): boolean {
         return false;

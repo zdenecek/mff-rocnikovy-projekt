@@ -5,6 +5,10 @@ import { Lifecycle, container } from "tsyringe";
 import { ApiContract } from "./api/ApiContract";
 import { UserRepositoryContract } from "./repository/UserRepositoryContract";
 import { UserServiceContract } from "./service/UserServiceContract";
+import { TournamentRepositoryContract } from "./repository/TournamentRepositoryContract";
+import { TournamentRepository } from "./repository/TournamentRepository";
+import { PlayerRepositoryContract } from "./repository/PlayerRepositoryContract";
+import { PlayerRepository } from "./repository/PlayerRepository";
 
 container
     .register<ApiContract>(
@@ -20,6 +24,16 @@ container
     .register<UserServiceContract>(
         "UserServiceContract",
         { useClass: UserService },
+        { lifecycle: Lifecycle.Singleton }
+    )
+    .register<TournamentRepositoryContract>(
+        "TournamentRepositoryContract",
+        { useClass: TournamentRepository },
+        { lifecycle: Lifecycle.Singleton }
+    )
+    .register<PlayerRepositoryContract>(
+        "PlayerRepositoryContract",
+        { useClass: PlayerRepository },
         { lifecycle: Lifecycle.Singleton }
     );
 

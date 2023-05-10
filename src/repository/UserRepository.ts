@@ -1,7 +1,7 @@
 import { UserRepositoryContract } from "./UserRepositoryContract";
 import { ApiContract } from "@/api/ApiContract";
 import { User, UserFilter } from "@/model/User";
-import { Paginator } from "@/api/Paginator";
+import { APIPaginator, Paginator } from "@/api/Paginator";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -15,18 +15,17 @@ export class UserRepository implements UserRepositoryContract {
                 params: {
                     query: filter.query,
                     page,
-                    perPage,
+                    per_page: perPage,
                 },
             })
-            .then((response: any) => {
+            .then((response: APIPaginator<User>) => {
                 return new Paginator(response);
             });
     }
 
     getCurrentUser(): Promise<User | undefined> {
-        return this.api.get("user").then((response: any) => {
-            const x = new User(response);
-            return x;
+        return this.api.get("user").then((response: User) => {
+            return new User(response);
     }).catch((error) => {
             if(error.response?.status === 401) return undefined;
         });
@@ -37,7 +36,7 @@ export class UserRepository implements UserRepositoryContract {
     }
 
     getUser(id: number): Promise<User> {
-        return this.api.get(`user/${id}`).then((response: any) => {
+        return this.api.get(`user/${id}`).then((response: User) => {
             return new User(response);
         });
     }

@@ -48,8 +48,7 @@ export default defineComponent({
 .head {
     background-color: $background;
     border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    
+    border-top-right-radius: 20px;    
 }
 
 .wrapper {

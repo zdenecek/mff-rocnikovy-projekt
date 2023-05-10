@@ -16,6 +16,16 @@ const routes: Array<RouteRecordRaw> = [
                 component: HomeView,
             },
             {
+                name: "tournaments",
+                path: "/turnaje",
+                component: () => import("../views/TournamentsView.vue"),
+            },
+            {
+                path: "/hraci",
+                name: "players",
+            component: () => import("../views/PlayersView.vue"),
+            },
+            {
                 path: "/admin",
                 name: "admin",
                 component: () => import("../views/AdminView.vue"),
@@ -30,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
-        path: "/login",
+        path: "/prihlaseni",
         name: "login",
         meta: {
             title: "Login",
@@ -38,12 +48,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/LoginView.vue"),
     },
     {
-        path: "/register",
+        path: "/registrace",
         name: "register",
         component: () => import("../views/RegisterView.vue"),
     },
     {
-        path: "/logout",
+        path: "/odhlaseni",
         name: "logout",
         redirect: () => {
             container
@@ -53,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
         },
     },
     {
-        path: "/error",
+        path: "/chyba",
         name: "error",
         props: true,
         component: () => import("../views/ErrorView.vue"),

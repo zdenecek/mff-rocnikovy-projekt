@@ -19,6 +19,18 @@ export class Paginator<T>  {
     lastPage: number;
     data: T[];
 
+    static default<X>(): Paginator<X> {
+        return new Paginator<X>({
+            total: 0,
+            current_page: 1,
+            per_page: 15,
+            from: null,
+            to: null,
+            last_page: 1,
+            data: [],
+        });
+    }
+
     constructor(data: APIPaginator<T>) {
         this.total = data.total;
         this.page = data.current_page;

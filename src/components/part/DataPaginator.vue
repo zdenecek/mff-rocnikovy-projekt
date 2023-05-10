@@ -59,7 +59,7 @@ export default defineComponent({
     computed: {
         availablePages() {
 
-            let pages: any[] = [1];
+            let pages: (any)[] = [1];
             let i = -this.onEachSide;
             if (this.page + i > 2) pages.push('separator');
             for (; i <= this.onEachSide; i++) {

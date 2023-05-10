@@ -4,8 +4,8 @@ import { ApiContract } from "./ApiContract";
 export class Api implements ApiContract {
     private doWithCsrf<T>(fn: () => Promise<T>): Promise<T> {
         return fn().catch((error) => {
-            if (error?.response.status == 419) {
-                console.log("CSRF error, retrying");
+            if (error.response?.status == 419) {
+                console.debug("CSRF error, retrying");
                 return axios.get("csrf-cookie").then(() => {
                     return fn();
                 });
