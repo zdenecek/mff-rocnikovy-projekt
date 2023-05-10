@@ -1,11 +1,10 @@
 <template>
-    Přihlášení
     <form>
         <input-field label="Email" type="email" v-model="email" :errors="errors?.email"></input-field>
         <input-field label="Heslo" type="password" v-model="password" :errors="errors?.password"></input-field>
-        <input type="submit" @click.prevent="login" />
+        <input type="submit" @click.prevent="login" value="Login" >
+        <router-link :to="{ name: 'register' }">Register</router-link>
     </form>
-    <router-link :to="{ name: 'register' }">registrujte se</router-link>
 </template>
 
 <script lang="ts">
@@ -39,3 +38,16 @@ export default defineComponent({
     },
 });
 </script>
+
+<style lang="scss">
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 10px;
+}
+
+</style>

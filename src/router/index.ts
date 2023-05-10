@@ -1,52 +1,8 @@
 import { UserServiceContract } from "@/service/UserServiceContract";
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import UsersView from "../views/UsersView.vue";
-import { container } from "@/container";
+import { createRouter, createWebHashHistory } from "vue-router";
+import { nextTick } from "vue";
+import  routes from "./routes";
 
-const routes: Array<RouteRecordRaw> = [
-    {
-        path: "/",
-        name: "home",
-        component: HomeView,
-    },
-    {
-        path: "/login",
-        name: "login",
-        component: () => import("../components/auth/LoginView.vue"),
-    },
-    {
-        path: "/register",
-        name: "register",
-        component: () => import("../components/auth/RegisterView.vue"),
-    },
-    {
-        path: "/logout",
-        name: "logout",
-        redirect: () => {
-            container.resolve<UserServiceContract>("UserServiceContract").logout();
-            return { name: "home", reload: true };
-        },
-    },
-    {
-        path: "/error",
-        name: "error",
-        props: true,
-        component: () => import("../views/ErrorView.vue"),
-    },
-    {
-        path: "/admin",
-        name: "admin",
-        component: () => import("../views/AdminView.vue"),
-        children: [
-            {
-                path: "users",
-                name: "users",
-                component: UsersView,
-            },
-        ],
-    },
-];
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -54,7 +10,7 @@ const router = createRouter({
 });
 
 function registerMiddleware(userService: UserServiceContract): void {
-    router.beforeResolve(async (to,from) => {
+    router.beforeResolve(async (to,) => {
         if (to.name === "login" || to.name === "register") {
             if (await userService.isLoggedIn()) {
                 console.debug("User logged in, redirecting to home");
@@ -80,6 +36,18 @@ function registerMiddleware(userService: UserServiceContract): void {
         }
     });
 
+    // todo move to dotenv
+    const DEFAULT_TITLE = 'Bridge results';
+    router.afterEach((to, ) => {
+        nextTick(() => {
+            if (to.meta.title)
+            document.title = to.meta.title + ' | ' + DEFAULT_TITLE;
+            else
+            document.title = DEFAULT_TITLE;
+        });
+    });
 }
+
+
 
 export { router, registerMiddleware };

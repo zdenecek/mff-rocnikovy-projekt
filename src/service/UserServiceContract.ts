@@ -1,4 +1,5 @@
 import { User } from "@/model/User";
+import { ISimpleEvent } from "strongly-typed-events";
 
 export interface UserServiceContract {
 
@@ -7,4 +8,6 @@ export interface UserServiceContract {
     logout(): Promise<void>;
 isLoggedIn(): Promise<boolean>;
     user(): Promise<User | undefined>;
+
+    get userStatusChanged(): ISimpleEvent<void>;
 }

@@ -1,13 +1,12 @@
 <template>
-    Registrace
     <form>
         <input-field label="Email" type="email" v-model="email" :errors="errors?.email"></input-field>
         <input-field label="Jméno" type="text" v-model="name" :errors="errors?.name"></input-field>
         <input-field label="Heslo" type="password" v-model="password" :errors="errors?.password"></input-field>
         <input-field label="Potvrdit heslo" type="password" v-model="confirmPassword" :errors="errors?.password_confirmation"></input-field>
-        <input type="submit" @click.prevent="register" />
+        <input type="submit" @click.prevent="register" value="Registrovat" />
+        <router-link :to="{ name: 'login'}">přihlašte se</router-link>
     </form>
-    <router-link :to="{ name: 'login'}">přihlašte se</router-link>
 
 </template>
 
@@ -39,3 +38,16 @@ export default defineComponent({
     },
 });
 </script>
+
+<style lang="scss">
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 10px;
+}
+
+</style>

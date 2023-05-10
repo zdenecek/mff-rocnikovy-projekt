@@ -2,13 +2,18 @@ import { UserServiceContract } from "./UserServiceContract";
 import { User } from "@/model/User";
 import { UserRepositoryContract } from "@/repository/UserRepositoryContract";
 import { inject, injectable } from "tsyringe";
+import { ISimpleEvent, SimpleEventDispatcher } from "strongly-typed-events"
 
 @injectable()
 export class UserService implements UserServiceContract {
     private currentUser?: Promise<User | undefined>;
     public loggedIn?: boolean = undefined;
 
-    
+    protected _userStatusChanged = new SimpleEventDispatcher<void>();
+
+    public get userStatusChanged(): ISimpleEvent<void> {
+        return this._userStatusChanged.asEvent();
+    }
 
     constructor(
         @inject("UserRepositoryContract")
@@ -28,11 +33,13 @@ export class UserService implements UserServiceContract {
                     `loaded user from local storage (${userObj.name})`
                 );
             }
+            this._userStatusChanged.dispatch();
         }
     }
 
     async logout(): Promise<void> {
         this.loggedIn = false;
+        this._userStatusChanged.dispatch();
         await this.userRepository.logout();
         this.currentUser = undefined;
         localStorage.removeItem("user");
@@ -47,6 +54,7 @@ export class UserService implements UserServiceContract {
 
     async login(email: string, password: string): Promise<void> {
         await this.userRepository.login(email, password);
+        this._userStatusChanged.dispatch();
         this.loggedIn = true;
         this.loadUser(true);
     }
