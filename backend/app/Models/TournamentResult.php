@@ -13,6 +13,7 @@ class TournamentResult extends Model
 
     protected $fillable = [ 'rank', 'title'];
 
+    public $timestamps = false;
 
     /**
      */

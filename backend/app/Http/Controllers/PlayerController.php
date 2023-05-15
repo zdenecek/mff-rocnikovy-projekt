@@ -10,9 +10,18 @@ class PlayerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Player::all();
+        $request->validate([
+            'per_page' => 'integer|max:200',
+            'page' => 'integer|min:1',
+        ]);
+
+
+        $per_page = $request->input('per_page', 15);
+        $page = $request->input('page', 1);
+
+        return Player::paginate($per_page);
     }
 
     /**
