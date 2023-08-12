@@ -30,7 +30,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@/style/colors.scss";
-
+@import "@/style/common.scss";
 
 #app {
   width: 100%;
@@ -40,17 +40,6 @@ export default defineComponent({
   align-items: center;
 }
 
-
-* {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    background: transparent;
-    box-sizing: border-box;
-}
 
 body {
   font-family: Arial;
@@ -64,4 +53,8 @@ body {
     background: $page-background;
 }
 
+
+h1, h2 {
+  user-select: none;
+}
 </style>

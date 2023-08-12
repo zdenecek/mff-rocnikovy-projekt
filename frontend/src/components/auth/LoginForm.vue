@@ -1,53 +1,44 @@
 <template>
-    <form>
-        <input-field label="Email" type="email" v-model="email" :errors="errors?.email"></input-field>
-        <input-field label="Heslo" type="password" v-model="password" :errors="errors?.password"></input-field>
-        <input type="submit" @click.prevent="login" value="Login" >
-        <router-link :to="{ name: 'register' }">Register</router-link>
+    <form ref="form">
+        <input-field class="input-field" label="Email" type="email" v-model="email" :errors="errors?.email" required></input-field>
+        <input-field class="input-field" label="Heslo" type="password" v-model="password" :errors="errors?.password" required></input-field>
+        <input type="submit" @click.prevent="login" value="Přihlásit">
+        <router-link :to="{ name: 'register' }">Registrace</router-link>
     </form>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from "vue";
+<script setup lang="ts">
+import { inject, ref } from "vue";
 import InputField from "@/components/part/InputField.vue";
 import { UserServiceContract } from "@/service/UserServiceContract";
+import { useRouter } from "vue-router";
 
-export default defineComponent({
-    components: { InputField },
-    name: "LoginView",
-    data: function () {
-        return {
-            userService: inject("userService") as UserServiceContract,
-            email: "",
-            password: "",
-            errors: {} as any,
-        };
-    },
-    methods: {
-        login() {
-            this.errors = {};
-            this.userService.login(this.email, this.password).catch((error) => {
-                this.errors = error.data?.errors;
-            }).then(() =>
-                {
-                    console.debug("redirecting");
-                    this.$router.push({ name: "home" });
-                }
-            );
-        },
-    },
-});
+
+const userService = inject("userService") as UserServiceContract
+
+
+const email = ref("")
+const password = ref("")
+const errors = ref({} as any)
+
+const router = useRouter();
+
+const form = ref({} as HTMLFormElement );
+
+function login() {
+
+    if(!form.value.reportValidity()) return;
+    
+    userService.login(email.value, password.value).then(() => {
+        console.debug("redirecting");
+        router.push({ name: "home" });
+    }
+    ).catch((error) => {
+        errors.value = error.data?.errors;
+    });
+}
 </script>
 
 <style lang="scss">
-
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    gap: 10px;
-}
-
+@import "@/style/auth-forms.scss";
 </style>

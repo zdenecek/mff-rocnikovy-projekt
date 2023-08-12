@@ -45,6 +45,7 @@ export default defineComponent({
     @import "@/style/unstyle-links.scss";
 }
 
+
 .head {
     background-color: $background;
     border-top-left-radius: 20px;
