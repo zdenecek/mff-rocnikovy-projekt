@@ -11,7 +11,6 @@ services:
     image: matrika-back
     container_name: matrika-app
     restart: unless-stopped
-    working_dir: /var/www/
     volumes:
       - ./backend:/var/www/backend
     networks:
@@ -46,6 +45,16 @@ services:
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - matrika
+
+  composer_installation:
+    container_name: composer_installation
+    image: composer
+    volumes:
+      - ./backend:/var/app
+    working_dir: /var/app/
+    command: composer install --ignore-platform-reqs
+    network_mode: none
+
 
 networks:
   matrika:
