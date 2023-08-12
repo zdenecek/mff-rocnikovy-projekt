@@ -6,7 +6,7 @@ services:
       args:
         user: user
         uid: 1000
-      context: .\backend
+      context: ./backend
       dockerfile: Dockerfile
     image: matrika-back
     container_name: matrika-app
