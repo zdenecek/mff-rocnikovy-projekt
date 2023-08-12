@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { createApp } from 'vue'
 import App from './App.vue'
-import { router, registerMiddleware } from './router'
+import { router, registerMiddleware } from '@/router'
 import axios from 'axios';
 import { container } from '@/container';
 import { UserServiceContract } from './service/UserServiceContract';
