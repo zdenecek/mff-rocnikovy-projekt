@@ -1,94 +1,146 @@
 <template>
-    <ul class="flex gap-2 m-2" v-if="availablePages.length > 1">
+    <ul class="paginator" v-if="availablePages.length > 1">
         <li
             v-if="previousPage"
             @click="changePage(previousPage)"
-            class="px-1 py-1.5 flex items-center cursor-pointer"
-            role="button"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            class="paginator-button"
+            role="button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="back" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </li>
         <li v-for="(page, index) in availablePages" :key="index">
             <div
-                @click="changePage(page)"
-                role="button"
-                v-if="page !== 'separator'"
-                class="w-7 h-7 cursor-pointer rounded flex items-center justify-center"
-                :class="{
-                    'border-transparent border-2 hover:border-primary ease-in duration-200': !active(page),
-                    'bg-primary text-gray': active(page),
-                }"
-            >
+                 @click="changePage(page)"
+                 role="button"
+                 v-if="page !== 'separator'"
+                 class="paginator-button"
+                 :class="{
+                     'active': active(page),
+                 }">
                 {{ page }}
             </div>
-            <div v-else class="w-7 h-7 cursor-default rounded flex items-center justify-center">...</div>
+            <div v-else class="paginator-button">...</div>
         </li>
         <li
             v-if="nextPage"
             @click="changePage(nextPage)"
-            class="px-1 py-1.5 flex items-center cursor-pointer"
-            role="button"
-        >
+            class="paginator-button"
+            role="button">
             <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
+                 xmlns="http://www.w3.org/2000/svg"
+                 class="h-4 w-4"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
         </li>
     </ul>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<style lang="scss">
 
-export default defineComponent({
-    name: 'DataPaginator',
-    props: ["page", "total", "perPage"],
-    emits: ['update:page'],
-    data: function() {
-        return {
-            onEachSide: 2,
-        };
-    },
-    computed: {
-        availablePages() {
+.paginator-button {
+    padding: .25em .3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1em;
+    cursor: pointer;
 
-            let pages: (any)[] = [1];
-            let i = -this.onEachSide;
-            if (this.page + i > 2) pages.push('separator');
-            for (; i <= this.onEachSide; i++) {
-                pages.push(this.page + i);
-            }
-            if (pages[pages.length - 1] < this.lastPage - 1) pages.push("separator");
-            pages.push(this.lastPage);
-            return pages.filter((val, index, self) => {
-                return (self.indexOf(val) === index && val > 0 && val <= this.lastPage) || val === "separator";
-            });
+
+    width: 1.75em;
+    height: 1.75em;
+
+    &.active {
+        border: transparent 0.5em;
+        
+        &:hover {
+            border: $primary 0.5em;
+            transition: all 0.2s ease-in-out;
+        }
+    }
+
+    &:not(.active) {
+        background-color: $primary;
+        color: gray;
+    }
+}
+
+.paginator {
+    display: flex;
+    gap: 0.5em;
+    margin: 0.5em;
+}
+
+.back, .forward {
+    width: 1em;
+    height: 1em;
+}
+
+
+</style>
+
+<script setup lang="ts">
+import { computed } from "vue";
+
+
+const emit = defineEmits(['update:page']);
+
+const props = defineProps(
+    {
+        page: {
+            type: Number,
+            required: true,
         },
-        lastPage(): number {
-            return Math.ceil(this.total / this.perPage);
+        total:  {
+            type: Number,
+            required: true,
         },
-        previousPage(): number | null {
-            return this.page === 1 ? null : this.page - 1;
+        perPage: {
+            type: Number,
+            default: 16,
         },
-        nextPage(): number | null {
-            return this.page === this.lastPage ? null : this.page + 1;
+        onEachSide: {
+            type: Number,
+            default: 2,
         },
-    },
-    methods: {
-        active(page: number) : boolean {
-            return page === this.page;
-        },
-        changePage(page: number): void {
-            this.$emit('update:page', page);
-        },
-    },
-    
+    }
+);
+
+function active(page: number): boolean {
+    return page === props.page;
+}
+function changePage(page: number): void {
+    emit('update:page', page);
+}
+
+const lastPage = computed(() => {
+    return Math.ceil(props.total / props.perPage);
 });
+
+const previousPage = computed(() => {
+    return props.page === 1 ? null : props.page - 1;
+});
+
+const nextPage = computed(() => {
+    return props.page === lastPage.value ? null : props.page + 1;
+});
+
+const availablePages = computed(() => {
+
+    let pages: (any)[] = [1];
+    let i = - props.onEachSide;
+    if (props.page + i > 2) pages.push('separator');
+    for (; i <= props.onEachSide; i++) {
+        pages.push(props.page + i);
+    }
+    if (pages[pages.length - 1] < lastPage.value - 1) pages.push("separator");
+    pages.push(lastPage.value);
+    return pages.filter((val, index, self) => {
+        return (self.indexOf(val) === index && val > 0 && val <= lastPage.value) || val === "separator";
+    });
+});
+
 </script>

@@ -27,12 +27,12 @@ const id = computed(() => props.id ?? props.label?.replace(/\s/, "").toLowerCase
             <li v-for="error in errors">{{ error }}</li>
         </ul>
         <input
-                v-bind="$attrs"
+               v-bind="$attrs"
                :id="id"
                :type="type"
                :value="modelValue"
                :placeholder="placeholder"
-               @input="$emit('update:modelValue', $event.target?.value)" />
+               @input="$emit('update:modelValue', ($event.target as HTMLInputElement)?.value)" />
 
     </div>
 </template>
@@ -51,15 +51,12 @@ input {
     gap: 2px;
 
     justify-content: stretch;
-
     justify-self: stretch;
 }
 
 .errors {
     color: #cc0000;
     font-size: smaller;
-
 }
-
 </style>
 

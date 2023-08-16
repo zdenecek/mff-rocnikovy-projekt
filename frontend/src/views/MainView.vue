@@ -57,39 +57,23 @@
   </main-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
+<script setup lang="ts">
+import { inject, ref } from 'vue'
 import MainLayout from '@/layouts/MainLayout.vue';
 import { UserServiceContract } from '@/service/UserServiceContract';
 
-export default defineComponent({
-  components: {
-    MainLayout
-  },
-  setup() {
-    let isLoggedIn = ref(false);
-    let isAdmin = ref(false);
-    const userService = inject("userService") as UserServiceContract;
+let isLoggedIn = ref(false);
+let isAdmin = ref(false);
+const userService = inject("userService") as UserServiceContract;
 
-    async function update() {
-      isLoggedIn.value = await userService.isLoggedIn();
-      isAdmin.value = (await userService.user())?.isAdmin() ?? false;
-    }
-    userService.userStatusChanged.sub(update);
-    update();
+async function update() {
+  isLoggedIn.value = await userService.isLoggedIn();
+  isAdmin.value = (await userService.user())?.isAdmin() ?? false;
+}
+userService.userStatusChanged.sub(update);
+update();
 
-    const thisYear = new Date().getFullYear();
-
-
-    return {
-      isLoggedIn,
-      isAdmin,
-      thisYear,
-      update
-    }
-  },
-
-})
+const thisYear = new Date().getFullYear();
 </script>
 
 <style lang="scss">

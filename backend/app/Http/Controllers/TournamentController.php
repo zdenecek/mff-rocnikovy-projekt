@@ -25,13 +25,6 @@ class TournamentController extends Controller
         return Tournament::paginate($per_page, ['*'], 'page', $page);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -45,14 +38,6 @@ class TournamentController extends Controller
      * Display the specified resource.
      */
     public function show(Tournament $tournament)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Tournament $tournament)
     {
         //
     }
