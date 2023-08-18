@@ -24,21 +24,26 @@ class TournamentController extends Controller
 
         return Tournament::paginate($per_page, ['*'], 'page', $page);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
+            'location' => 'required|string|max:255'
+        ]);
+
+        $data['title']= $data['name'];
+    
+        // Storing the validated data in the database
+        return Tournament::create($data);
+    
+    
     }
 
     /**
@@ -46,15 +51,7 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Tournament $tournament)
-    {
-        //
+        return Tournament::with('results', 'results.players')->find($tournament->id);
     }
 
     /**
@@ -62,7 +59,19 @@ class TournamentController extends Controller
      */
     public function update(Request $request, Tournament $tournament)
     {
-        //
+        $data = $request->validate([
+            'tournament_name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'location' => 'required|string|max:255'
+        ]);
+
+        $data['title']= $data['tournament_name'];
+    
+        // Storing the validated data in the database
+        $tournament->update($data);
+    
+        return $tournament;
     }
 
     /**
@@ -70,6 +79,9 @@ class TournamentController extends Controller
      */
     public function destroy(Tournament $tournament)
     {
-        //
+        $tournament->delete();
+
+        return response()->json(['message' => 'Tournament deleted successfully.'], 200);
     }
+        
 }

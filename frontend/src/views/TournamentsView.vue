@@ -1,9 +1,15 @@
 <template>
   <div>
     <h1>Turnaje</h1>
+    <div>
+    <router-link :to="{ name: 'create-tournament' }">Vytvořit nový turnaj</router-link>
+    </div>
+    
 
     <div v-for="tournament in tournaments.data" :key="tournament.id">
       {{ tournament.title }}
+
+      <button> Upravit </button>
     </div>
     </div>
 </template>

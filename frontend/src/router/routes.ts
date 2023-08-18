@@ -26,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import("../views/PlayersView.vue"),
             },
             {
+                path: "/vytvorit-turnaj",
+                name: "create-tournament",
+                component: () => import("../views/TournamentFormView.vue"),
+            },
+            {
                 path: "/admin",
                 name: "admin",
                 component: () => import("../views/AdminView.vue"),

@@ -4,6 +4,7 @@
         <input-field class="input-field" label="Heslo" type="password" v-model="password" :errors="errors?.password" required></input-field>
         <input type="submit" @click.prevent="login" value="Přihlásit">
         <router-link :to="{ name: 'register' }">Registrace</router-link>
+           
     </form>
 </template>
 
@@ -15,7 +16,6 @@ import { useRouter } from "vue-router";
 
 
 const userService = inject("userService") as UserServiceContract
-
 
 const email = ref("")
 const password = ref("")

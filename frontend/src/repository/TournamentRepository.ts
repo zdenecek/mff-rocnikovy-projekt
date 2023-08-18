@@ -3,11 +3,18 @@ import { ApiContract } from "@/api/ApiContract";
 import { Tournament } from "@/model/Tournament";
 import { Paginator } from "@/api/Paginator";
 import { inject, injectable } from "tsyringe";
+import { TournamentData } from "@/model/TournamentData";
 
 @injectable()
 export class TournamentRepository implements TournamentRepositoryContract {
     constructor(
         @inject('ApiContract') private api: ApiContract) {}
+    
+    create(data: TournamentData): Promise<Tournament> {
+        return this.api.post(`tournaments`, data).then((response: any) => {
+            return new Tournament(response);
+        });
+    }
         
     get(id: number): Promise<Tournament> {
         return this.api.get(`tournament/${id}`).then((response: any) => {

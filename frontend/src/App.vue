@@ -31,6 +31,7 @@ export default defineComponent({
 <style lang="scss">
 @import "@/style/colors.scss";
 @import "@/style/common.scss";
+@import "@/style/control-elements.scss";
 
 #app {
   width: 100%;
@@ -39,6 +40,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
 }
+
 
 
 body {
