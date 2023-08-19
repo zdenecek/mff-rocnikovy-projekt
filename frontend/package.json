@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
+    "sweetalert2": "^11.7.23",
     "tsyringe": "^4.8.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"

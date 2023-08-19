@@ -40,6 +40,8 @@
 </template>
 
 <style lang="scss">
+@import "@/style/colors.scss";
+
 
 .paginator-button {
     padding: .25em .3em;
@@ -57,13 +59,13 @@
         border: transparent 0.5em;
         
         &:hover {
-            border: $primary 0.5em;
+            border: $foreground 0.5em;
             transition: all 0.2s ease-in-out;
         }
     }
 
     &:not(.active) {
-        background-color: $primary;
+        background-color: $foreground;
         color: gray;
     }
 }
