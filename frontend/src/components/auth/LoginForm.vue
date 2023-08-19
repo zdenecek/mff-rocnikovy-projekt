@@ -29,7 +29,8 @@ function login() {
 
     if(!form.value.reportValidity()) return;
     
-    userService.login(email.value, password.value).then(() => {
+    userService.login(email.value, password.value)
+    .then(() => {
         console.debug("redirecting");
         router.push({ name: "home" });
     }

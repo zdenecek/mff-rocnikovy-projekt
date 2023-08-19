@@ -6,39 +6,26 @@
     <data-paginator v-model:page="page" :perPage="perPage" :total="total"></data-paginator>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import DataPaginator from "@/components/part/DataPaginator.vue";
 import { User } from "@/model/User";
 import { UserRepositoryContract } from "@/repository/UserRepositoryContract";
-import { defineComponent, inject } from "vue";
+import { inject, ref, watch, onMounted } from "vue";
 
-export default defineComponent({
-    name: "UsersView",
-    components: { DataPaginator },
-    data: function () {
-        return {
-            userRepository: inject("userRepository") as UserRepositoryContract,
-            users: new Array<User>(),
-            page: 1,
-            perPage: 25,
-            total: 1,
-        };
-    },
-    watch: {
-        page() {
-            this.update();
-        },
-    },
-    methods: {
-        async update() {
-            const paginator = await this.userRepository.getUsers(this.perPage, this.page, {});
-            this.page = paginator.page;
-            this.users = paginator.data;
-            this.total = paginator.total;
-        },
-    },
-    mounted: function () {
-        this.update();
-    },
-});
+const userRepository = inject("userRepository") as UserRepositoryContract;
+const users = ref([] as User[])
+const page = ref(1)
+const perPage = ref(25)
+const total = ref(1)
+
+onMounted(() => update());
+watch(page, () => update());
+
+async function update() {
+    const paginator = await userRepository.getUsers(perPage.value, page.value, {});
+    page.value = paginator.page;
+    users.value = paginator.data;
+    total.value = paginator.total;
+}
+
 </script>

@@ -25,7 +25,6 @@ class TournamentController extends Controller
         return Tournament::paginate($per_page, ['*'], 'page', $page);
     }
     
-
     /**
      * Store a newly created resource in storage.
      */
