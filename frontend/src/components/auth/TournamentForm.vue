@@ -1,11 +1,10 @@
 <template>
     <form ref="form">
-        <input-field class="input-field" label="Název turnaje" v-model="name"></input-field>
-        <input-field class="input-field" label="Místo konání" v-model="location"></input-field>
-        <input-field class="input-field" label="Datum začátku" type="date" v-model="startDate"></input-field>
-        <input-field class="input-field" label="Datum konce" type="date" v-model="endDate"></input-field>
+        <input-field class="input-field" label="Název turnaje" v-model="name" :errors="errors?.name" required></input-field>
+        <input-field class="input-field" label="Místo konání" v-model="location" :errors="errors?.location" required></input-field>
+        <input-field class="input-field" label="Datum začátku" type="date" v-model="startDate" :errors="errors?.startDate" required></input-field>
+        <input-field class="input-field" label="Datum konce" type="date" v-model="endDate" :errors="errors?.endDate" required></input-field>
         <input type="submit" @click.prevent="submit" value="Vytvořit">
-           
     </form>
 </template>
 
@@ -38,6 +37,8 @@ const tournament = ref({
 
 const form = ref({} as HTMLFormElement );
 const router = useRouter();
+const errors = ref({} as any)
+
 
 
 function submit() {
@@ -50,11 +51,13 @@ function submit() {
     */
 
     console.log(tournament.value);
-    tournamentRepository.create(tournament.value);
-
-    router.push({ name: "tournaments" });
-
-
+    tournamentRepository.create(tournament.value).then((response) => {
+        console.log(response);
+        router.push({ name: "tournaments" });
+    })
+    .catch((error) => {
+        errors.value = error.data?.errors;
+    });
     
     
 }
