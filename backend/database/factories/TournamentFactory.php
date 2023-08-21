@@ -46,13 +46,13 @@ class TournamentFactory extends Factory
         $city = $this->faker->city();
         $country = $this->faker->country();
         $location = $city . ", " . $country;
-        $title = $type . " " . $location;
+        $name = $type . " " . $location;
 
         return [
-            'title' => $title,
+            'name' => $name,
             'type' => $this->faker->randomElement(TournamentType::cases()),
-            'start_date' => $date,
-            'end_date' => $otherDate,
+            'startDate' => $date,
+            'endDate' => $otherDate,
             'location' => $location,
             'description' => $this->faker->text(),
         ];

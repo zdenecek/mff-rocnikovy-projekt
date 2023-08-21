@@ -7,9 +7,9 @@
     
 
     <div v-for="tournament in tournaments.data" :key="tournament.id">
-      {{ tournament.title }}
+      {{ tournament.name }}
 
-      <button> Upravit </button>
+        <router-link :to="{ name: 'edit-tournament', params: { id: tournament.id } }">Upravit</router-link>
     </div>
   </div>
 </template>

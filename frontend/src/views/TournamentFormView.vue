@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TournamentForm from '@/components/auth/TournamentForm.vue';
+import TournamentForm from '@/components/forms/TournamentForm.vue';
 </script>
 
 <template>
@@ -7,4 +7,5 @@ import TournamentForm from '@/components/auth/TournamentForm.vue';
         <h1>Tvorba turnaje</h1>
         <tournament-form/>
     </div>
+    
 </template>

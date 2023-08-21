@@ -31,6 +31,12 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("../views/TournamentFormView.vue"),
             },
             {
+                path: "/upravit-turnaj/:id",
+                name: "edit-tournament",
+                component: () => import("../views/TournamentEditView.vue"),
+            },
+
+            {
                 path: "/admin",
                 name: "admin",
                 component: () => import("../views/AdminView.vue"),

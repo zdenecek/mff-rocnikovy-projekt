@@ -24,7 +24,7 @@ class TournamentController extends Controller
 
         return Tournament::paginate($per_page, ['*'], 'page', $page);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
@@ -36,8 +36,6 @@ class TournamentController extends Controller
             'endDate' => 'required|date|after_or_equal:startDate',
             'location' => 'required|string|max:255'
         ]);
-
-        $data['title']= $data['name'];
     
         // Storing the validated data in the database
         return Tournament::create($data);
@@ -50,7 +48,9 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament)
     {
-        return Tournament::with('results', 'results.players')->find($tournament->id);
+        //return Tournament::with('results', 'results.players')->find($tournament->id);
+        
+        return $tournament;
     }
 
     /**
@@ -59,13 +59,11 @@ class TournamentController extends Controller
     public function update(Request $request, Tournament $tournament)
     {
         $data = $request->validate([
-            'tournament_name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'name' => 'required|string|max:255',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
             'location' => 'required|string|max:255'
         ]);
-
-        $data['title']= $data['tournament_name'];
     
         // Storing the validated data in the database
         $tournament->update($data);

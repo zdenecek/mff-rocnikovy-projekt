@@ -33,4 +33,6 @@ Route::delete('/tournaments/{tournament}', [TournamentController::class , 'destr
 
 Route::get('/players', [PlayerController::class , 'index']);
 
+Route::post('/players/search', [PlayerController::class , 'search']); 
+
 Route::get('/tournaments/{tournament}', [TournamentController::class , 'show']);

@@ -17,7 +17,7 @@ export class TournamentRepository implements TournamentRepositoryContract {
     }
         
     get(id: number): Promise<Tournament> {
-        return this.api.get(`tournament/${id}`).then((response: any) => {
+        return this.api.get(`tournaments/${id}`).then((response: any) => {
             return new Tournament(response);
         });
     }
@@ -36,7 +36,7 @@ export class TournamentRepository implements TournamentRepositoryContract {
     }
 
     update(data: Tournament): Promise<void> {
-        return this.api.put(`tournament/${data.id}`, { params: data });
+        return this.api.put(`tournaments/${data.id}`, { params: data });
     }
 
     delete(id: number): Promise<void> {

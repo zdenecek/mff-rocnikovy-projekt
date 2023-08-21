@@ -4,6 +4,7 @@
         <input-field class="input-field" label="Místo konání" v-model="location" :errors="errors?.location" required></input-field>
         <input-field class="input-field" label="Datum začátku" type="date" v-model="startDate" :errors="errors?.startDate" required></input-field>
         <input-field class="input-field" label="Datum konce" type="date" v-model="endDate" :errors="errors?.endDate" required></input-field>
+        <tournament-result/>
         <input type="submit" @click.prevent="submit" value="Vytvořit">
     </form>
 </template>
@@ -13,6 +14,7 @@ import { inject, ref } from "vue";
 import InputField from "@/components/part/InputField.vue";
 import { TournamentRepositoryContract } from '@/repository/TournamentRepositoryContract';
 import { useRouter } from "vue-router";
+import TournamentResult from "@/components/forms/TournamentResult.vue";
 
 
 
@@ -44,11 +46,6 @@ const errors = ref({} as any)
 function submit() {
 
     if(!form.value.reportValidity()) return;
-
-    /*
-    TODO - can be clicked with empty fields
-    TODO - upon error show error message, not fail silently
-    */
 
     console.log(tournament.value);
     tournamentRepository.create(tournament.value).then((response) => {

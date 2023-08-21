@@ -36,4 +36,13 @@ export class PlayerRepository implements PlayerRepositoryContract {
         return this.api.delete(`player/${id}`);
     }
 
+    search(query: string): Promise<Player[]> {
+        return this.api.post(`players/search`, {
+            q: query,
+        }).then((response: any) => {
+            return response.map((item: any) => new Player(item));
+        });
+    }
+
+
 }

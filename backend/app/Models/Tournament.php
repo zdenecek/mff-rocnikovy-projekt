@@ -11,7 +11,7 @@ class Tournament extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'title' ];
+    protected $fillable = [ 'name' ];
 
     // This does default eager loading
     protected $with = ['results', 'results.players'];

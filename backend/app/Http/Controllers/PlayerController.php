@@ -72,4 +72,22 @@ class PlayerController extends Controller
     {
         //
     }
+
+    /**
+     * Search for a name like
+     */
+    public function search(Request $request)
+    {
+        $possible_names = Player::query();
+
+        
+        if ($request->filled('q')){
+            $possible_names->where('name', 'like', "%{$request->get('q')}%");
+        }
+
+        return $possible_names->limit(10)->get();
+    }
+
+    
+
 }
