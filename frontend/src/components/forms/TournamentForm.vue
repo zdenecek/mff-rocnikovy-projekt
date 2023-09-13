@@ -4,17 +4,21 @@
         <input-field class="input-field" label="Místo konání" v-model="location" :errors="errors?.location" required></input-field>
         <input-field class="input-field" label="Datum začátku" type="date" v-model="startDate" :errors="errors?.startDate" required></input-field>
         <input-field class="input-field" label="Datum konce" type="date" v-model="endDate" :errors="errors?.endDate" required></input-field>
-        <tournament-result/>
+        
+        <!-- EVENT listener -->
+        <tournament-result @update = "((data : TournamentResultData[]) => tournament.results = data)"></tournament-result>
+        
         <input type="submit" @click.prevent="submit" value="Vytvořit">
     </form>
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import InputField from "@/components/part/InputField.vue";
 import { TournamentRepositoryContract } from '@/repository/TournamentRepositoryContract';
 import { useRouter } from "vue-router";
 import TournamentResult from "@/components/forms/TournamentResult.vue";
+import { TournamentResultData } from "@/model/TournamentData";
 
 
 
@@ -28,11 +32,14 @@ const location = ref("")
 const startDate = ref("")
 const endDate = ref("")
 
+onMounted(() => { name.value = ""; location.value = ""; startDate.value = ""; endDate.value = ""; } )
+
 const tournament = ref({
     name: name,
     location: location,
     startDate: startDate,
-    endDate: endDate
+    endDate: endDate,
+    results: [] as TournamentResultData[]
 });
 
 
@@ -55,8 +62,6 @@ function submit() {
     .catch((error) => {
         errors.value = error.data?.errors;
     });
-    
-    
 }
 </script>
 

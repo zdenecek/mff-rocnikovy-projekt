@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             // TODO Add support for more than one federation
-            $table->string('federation_id')->nullable();
+            $table->integer('federation_id')->nullable();
             $table->timestamps();
         });
     }
