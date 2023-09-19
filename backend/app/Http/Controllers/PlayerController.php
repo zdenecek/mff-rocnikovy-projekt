@@ -14,47 +14,40 @@ class PlayerController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'per_page' => 'integer|max:200',
+            'per_page' => 'integer',
             'page' => 'integer|min:1',
         ]);
-
 
         $per_page = $request->input('per_page', 15);
         $page = $request->input('page', 1);
 
+        if($per_page < 1) return Player::all();
         return Player::paginate($per_page);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'string|required|min:3|max:255',
+            'federationId' => 'integer|positive',
+        ]);
+
+        $player = Player::create([
+            'name' => $request->input('name'),
+            'federationId' => $request->input('federationId'),
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Player $player)
+    public function show(Player $player) 
     {
         return $player;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Player $player)
-    {
-        //
     }
 
     /**
@@ -62,7 +55,17 @@ class PlayerController extends Controller
      */
     public function update(Request $request, Player $player)
     {
-        //
+        $request->validate([
+            'name' => 'string|min:3|max:255',
+            'federationId' => 'integer|positive',
+        ]);
+
+        $player->update([
+            'name' => $request->input('name'),
+            'federationId' => $request->input('federationId'),
+        ]);
+
+        return $player;
     }
 
     /**
@@ -70,7 +73,7 @@ class PlayerController extends Controller
      */
     public function destroy(Player $player)
     {
-        //
+        $player->delete();
     }
 
     /**

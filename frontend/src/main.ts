@@ -14,6 +14,9 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
 axios.defaults.headers.common['Accept'] = "application/json";
 axios.defaults.withCredentials = true;
 
+import PrimeVue from 'primevue/config';
+import "primevue/resources/themes/lara-light-indigo/theme.css";
+
 const userService = container.resolve<UserServiceContract>("UserServiceContract");
 
 registerMiddleware(userService);
@@ -32,4 +35,7 @@ const dependencies =  {
     playerRepository: container.resolve<PlayerRepositoryContract>("PlayerRepositoryContract"),
 };
 
-createApp(App, dependencies).use(router).mount('#app')
+createApp(App, dependencies)
+.use(router)
+.use(PrimeVue)
+.mount('#app')

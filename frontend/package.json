@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "primevue": "^3.34.1",
     "reflect-metadata": "^0.1.13",
     "sweetalert2": "^11.7.23",
     "tsyringe": "^4.8.0",
