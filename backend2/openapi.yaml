@@ -1,0 +1,11 @@
+openapi: 3.0.0
+info:
+  title: Matrika API
+  version: 0.1.0a
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: sessionId

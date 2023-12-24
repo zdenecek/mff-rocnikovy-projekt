@@ -41,15 +41,9 @@ The project is divided into two parts, the backend and the frontend.
 
 The expectation is that the backend will be augmented by workers to perform tasks, including working with external databases, eg. through scraping even.
 
-Both frontend and backend can be found in separate repositories and are added to this project as submodules:
-    - [Frontend](https://github.com/zdenecek/matrikabs-front)
-    - [Backend](https://github.com/zdenecek/matrikabs)
+
 
 ### Backend
-
-The backend is written in PHP 8 using the [Laravel](https://laravel.com/) framework.
-
-The backend is responsible for storing and managing the data and providing an API for the frontend.
 
 ### Frontend
 

@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Tournament API
+  version: 1.0.0
+paths:
+  /tournaments:
+    get:
+      summary: Get all tournaments
+      tags: ["Tournaments"]
+      responses:
+        '200':
+          description: A list of tournaments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tournament'
+    post:
+      summary: Create a new tournament
+      tags: ["Tournaments"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tournament'
+      responses:
+        '201':
+          description: The created tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+  /tournaments/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get a specific tournament by ID
+      tags: ["Tournaments"]
+      responses:
+        '200':
+          description: The requested tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+    patch:
+      summary: Update a specific tournament by ID
+      tags: ["Tournaments"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tournament'
+      responses:
+        '200':
+          description: The updated tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+    delete:
+      summary: Delete a specific tournament by ID
+      tags: ["Tournaments"]
+      responses:
+        '200':
+          description: Confirmation of the deleted tournament
+components:
+  schemas:
+    Tournament:
+      type: object
+      properties:
+        title:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        place:
+          type: string
+        description:
+          type: string
+        externalDocumentationLink:
+          type: array
+          items:
+            type: string
