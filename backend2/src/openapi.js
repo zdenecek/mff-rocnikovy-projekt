@@ -9,13 +9,13 @@ const options = {
       version: '0.1.0',
     },
   },
-  apis: ['./routes/*.yaml', 'openapi.yaml'], 
+  apis: ['./src/routes/*.yaml', './openapi.yaml'], 
 };
 
 
-function initApiDocs(app) {
+function init(app) {
   const openapiSpecification = swaggerJsdoc(options);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 }
 
-module.exports = initApiDocs;
+module.exports = { init };

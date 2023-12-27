@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const Tournament = require('../models/Tournament');
+const {Tournament} = require('../models');
 const { authorize } = require('../src/auth');
+const { check, validationResult } = require('express-validator');
+
 
 // Get all tournaments
-router.get('/', authorize(), async (req, res) => {
+router.get('/',  async (req, res) => {
   const tournaments = await Tournament.findAll();
   res.json(tournaments);
 });
 
 // Get one tournament
-router.get('/:id', authorize(), async (req, res) => {
+router.get('/:id', async (req, res) => {
   const tournament = await Tournament.findByPk(req.params.id);
   if (tournament) {
     res.json(tournament);
@@ -20,13 +22,39 @@ router.get('/:id', authorize(), async (req, res) => {
 });
 
 // Create one tournament
-router.post('/', authorize(), async (req, res) => {
+router.post('/', authorize("admin"),
+[
+  check('title').notEmpty().withMessage('required'),
+  check('startDate').isDate().withMessage('not-valid-date'),
+  check('endDate').optional().isDate().withMessage('not-valid-date'),
+  check('place').optional(),
+  check('description').optional(),
+  check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
+], async (req, res) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
   const tournament = await Tournament.create(req.body);
   res.status(201).json(tournament);
 });
 
 // Update one tournament
-router.patch('/:id', authorize(), async (req, res) => {
+router.patch('/:id', authorize("admin"),[
+  check('title').optional().notEmpty().withMessage('required'),
+  check('startDate').optional().isDate().withMessage('not-valid-date'),
+  check('endDate').optional().isDate().withMessage('not-valid-date'),
+  check('place').optional(),
+  check('description').optional(),
+  check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
+], async (req, res) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
   const tournament = await Tournament.findByPk(req.params.id);
   if (tournament) {
     await tournament.update(req.body);
@@ -37,7 +65,7 @@ router.patch('/:id', authorize(), async (req, res) => {
 });
 
 // Delete one tournament
-router.delete('/:id', authorize(), async (req, res) => {
+router.delete('/:id', authorize("admin"), async (req, res) => {
   const tournament = await Tournament.findByPk(req.params.id);
   if (tournament) {
     await tournament.destroy();

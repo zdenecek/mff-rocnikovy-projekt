@@ -1,0 +1,15 @@
+{
+  "development": {
+    "storage": "/Users/zdenek.tomis/src/personal/matrikabs/backend2/dev.db",
+    "dialect": "sqlite"
+  },
+  "test": {   
+    "storage": "test.db",
+    "dialect": "sqlite",
+    "logging": false
+  },
+  "production": {
+    "use_env_variable": "SQL_DB_URL",
+    "dialect": "mysql"
+  }
+}

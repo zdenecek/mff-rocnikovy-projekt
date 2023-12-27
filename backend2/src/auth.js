@@ -4,7 +4,7 @@ const User = require("../models/User");
 const MongoStore = require("connect-mongo");
 const session = require("express-session");
 
-function initAuth(app) {
+function init(app) {
   const dbUrl = process.env.DB_URL || "mongodb://localhost:27017";
 
   app.use(
@@ -21,7 +21,6 @@ function initAuth(app) {
     })
   );
 
-  app.use(passport.initialize());
   app.use(passport.session());
 
   passport.use(
@@ -97,11 +96,9 @@ function authorize(roles = []) {
         res.status(403).json({ success: false, code: "forbidden" });
       }
     } else {
-      res.status(401).json({ success: false, code: "not-logged-in" });
+      res.status(401).json({ success: false, code: "unauthorized" });
     }
   };
 }
 
-const authenticate = authorize();
-
-module.exports = { initAuth, authenticate, authorize };
+module.exports = { init, authorize };

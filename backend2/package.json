@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "npx sequelize-cli db:migrate --env test; mocha --exit --recursive"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -14,6 +15,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
     "mongoose": "^8.0.3",
     "morgan": "~1.9.1",
     "passport": "^0.7.0",
@@ -22,5 +24,12 @@
     "sqlite3": "^5.1.6",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "sequelize-cli": "^6.6.2",
+    "sinon": "^17.0.1",
+    "supertest": "^6.3.3"
   }
 }

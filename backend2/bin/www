@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('backend2:server');
+var app = require('../index');
+var debug = require('debug')('backend:server');
 var http = require('http');
 
 /**
