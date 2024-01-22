@@ -1,0 +1,7 @@
+
+@use "@/styles/colors" as *;
+@import url("@/styles/common.scss");
+
+body {
+    background-color: $tertiary;
+}

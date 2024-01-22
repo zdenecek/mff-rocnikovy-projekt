@@ -11,6 +11,7 @@ const openapi = require('./openapi');
 const indexRouter = require('../routes/index');
 const usersRouter = require('../routes/users');
 const tournamentRouter = require('../routes/tournament');
+const playersRouter = require('../routes/player');
 
 
 function makeApp() {
@@ -29,6 +30,7 @@ function makeApp() {
 
   app.use('/', indexRouter);
   app.use('/users', usersRouter);
+  app.use('/players', playersRouter);
   app.use('/tournaments', tournamentRouter);
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(function (err, req, res, next) {

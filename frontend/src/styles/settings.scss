@@ -1,0 +1,7 @@
+$custom-family: "Ubuntu", sans-serif;
+@use "vuetify/settings" with (
+  $body-font-family: $custom-family,
+  $heading-font-family: $custom-family
+);
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu");
+@import url('https://fonts.googleapis.com/css2?family=Pontano+Sans');

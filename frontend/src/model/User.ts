@@ -1,20 +1,20 @@
 type UserFilter = {
-    query?: string;
+  query?: string;
 };
 
 class User {
-    id?: number;
-    name?: string;
-    email?: string;
-    role?: unknown;
+  id?: number;
+  name?: string;
+  email?: string;
+  role?: unknown;
 
-    constructor(params: User) {
-        Object.assign(this, params);
-    }
+  constructor(params: User) {
+    Object.assign(this, params);
+  }
 
-    isAdmin(): boolean {
-        return false;
-    }
+  isAdmin(): boolean {
+    return false;
+  }
 }
 
-export {User, UserFilter};
+export { User, UserFilter };

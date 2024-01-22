@@ -1,9 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const {Tournament} = require('../models');
+const {Tournament, Result, Player} = require('../models');
 const { authorize } = require('../src/auth');
 const { check, validationResult } = require('express-validator');
 
+
+const resultValidators = [
+  check('results.*.scoreAchieved').isNumeric().withMessage('not-valid-number'),
+  check('results.*.players').isArray().withMessage('not-valid-array'),
+  check('results.*.players.*.id').optional().isNumeric().withMessage('not-valid-number'),
+  check('results.*.players.*.type').optional().isIn(['create']).withMessage('not-valid-type'),
+  check('results.*.unitName').optional().notEmpty().withMessage('required'),
+  check('results.*.players.*').custom((player) => {
+    if (player.type === 'create' && !player.lastName) {
+      throw new Error('last-name-required');
+    }
+    return true;
+  }),
+]
 
 // Get all tournaments
 router.get('/',  async (req, res) => {
@@ -13,7 +27,21 @@ router.get('/',  async (req, res) => {
 
 // Get one tournament
 router.get('/:id', async (req, res) => {
-  const tournament = await Tournament.findByPk(req.params.id);
+  const tournament = await Tournament.findByPk(req.params.id, {
+    include: [
+      {
+        model: Result,
+        as: 'results',
+        attributes: { exclude: ['tournamentId' ] }, // exclude fields from the Child model
+        include: {
+          model: Player,
+          as: 'players',
+          through: { attributes: [] } ,
+          attributes: { exclude: ['birthdate', 'createdAt', 'updatedAt' ] } // exclude fields from the Child model
+        }
+      }
+    ]
+  });
   if (tournament) {
     res.json(tournament);
   } else {
@@ -29,14 +57,44 @@ router.post('/', authorize("admin"),
   check('endDate').optional().isDate().withMessage('not-valid-date'),
   check('place').optional(),
   check('description').optional(),
+  check('results').optional().isArray().withMessage('not-valid-array'),
   check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
-], async (req, res) => {
+], resultValidators
+, async (req, res) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, errors: errors.array() });
+    return res.status(400).json({ success: false, code: "validation-error", errors: errors.array() });
   }
-  const tournament = await Tournament.create(req.body);
+
+  const { results, ...tournamentData } = req.body;
+  const tournament = await Tournament.create(tournamentData, {include: ['results']});
+
+  if (results) {
+    for (const resultData of results) {
+      const { players, ...resultInfo } = resultData;
+      const result = await Result.create(resultInfo);
+
+      for (const playerData of players) {
+        let player;
+        if (playerData.type === 'create') {
+          player = await Player.create(playerData);
+        } else {
+          player = await Player.findByPk(playerData.id);
+        }
+
+        if (player) {
+          const unit = await Unit.create({ name: player.lastName });
+          await unit.setPlayer(player);
+          await result.setUnit(unit);
+        }
+      }
+
+      await tournament.addResult(result);
+    }
+  }
+
+
   res.status(201).json(tournament);
 });
 
@@ -47,12 +105,13 @@ router.patch('/:id', authorize("admin"),[
   check('endDate').optional().isDate().withMessage('not-valid-date'),
   check('place').optional(),
   check('description').optional(),
-  check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
-], async (req, res) => {
+  check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url'),
+  
+], resultValidators, async (req, res) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, errors: errors.array() });
+    return res.status(400).json({ success: false,code: "validation-error", errors: errors.array() });
   }
 
   const tournament = await Tournament.findByPk(req.params.id);

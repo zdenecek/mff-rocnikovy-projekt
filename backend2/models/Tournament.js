@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATE,
     place: DataTypes.STRING,
     description: DataTypes.STRING,
-    externalDocumentationLink: DataTypes.STRING
+    externalDocumentationLink: DataTypes.STRING,
+    type: {
+      type:   DataTypes.ENUM,
+      values: ['individual', 'pair', 'team']
+    }
   }, {
     sequelize,
     modelName: 'Tournament',

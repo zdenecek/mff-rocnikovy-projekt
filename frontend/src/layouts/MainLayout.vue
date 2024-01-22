@@ -1,101 +1,62 @@
 
-
 <template>
-    <div class="wrapper">
+    <!-- Rest of the script and style sections -->
+    <v-app>
+        <v-app-bar app color="primary" dark>
+            <v-container class="nav-container">
+                <v-toolbar-title>
+                    <router-link :to="{ name: 'home' }" class="toolbar-link">
 
-    <div class="container main-layout">
-        <div class="head">
-            <slot name="header" />
+                        <div id="logo-wrapper">
+                            <img src="@/assets/habra.png" alt="Logo" height="40" id="logo">
+                            <span>Matrika BS Havířov</span>
+                        </div>
+                    </router-link>
+                </v-toolbar-title>
+                <nav class="nav-buttons">
+                    <v-btn variant="text" :to="{ name: 'tournaments' }">Turnaje</v-btn>
+                    <v-btn variant="text" :to="{ name: 'players' }">Hráči</v-btn>
+                </nav>
+            </v-container>
+        </v-app-bar>
 
-            <div class="line">
+        <v-main>
+            <div class="content-wrapper">
+
+                <v-container>
+                    <router-view></router-view>
+                </v-container>
             </div>
-        </div>
-        <div class="content">
-            <slot></slot>
-        </div>
-        <div class="footer">
-            <div class="line">
-                <slot name="footer-line" />
-            </div>
-        </div>
-    </div>
-</div>
-
+        </v-main>
+    </v-app>
 </template>
 
-<style lang="scss" scoped>
-@import "@/style/colors.scss";
-
-.wrapper {
-    padding: 15px 0;
-}
-
-.container {
-    width: 960px;
-    margin: auto;
-    border-radius: 20px;
-    min-height: calc(100vh - 30px);
-
-    background-color: white;
+<style>
+#logo-wrapper {
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.8);
-}
-
-.head {
-    background-color: $background;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
-
-.head :slotted(h1) {
-    text-align: center;
-    font-size: 48px;
-    padding: 40px 20px;
-    color: white;
-    text-shadow: -1px -1px 0 #000000, 0px -1px 0 #000000, 1px -1px 0 #000000,
-        -1px 1px 0 #000000, 0px 1px 0 #000000, 1px 1px 0 #000000;
-}
-
-
-
-.router-link-active {
-    cursor: pointer;
-    background: $foreground;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.8);
-}
-.line {
-    // hide shadow from nav links
-    position: relative;
-    z-index: 3;
-}
-
-
-.content {
-    flex-grow: 1;
-    padding: 10px 20px 60px ; 
-}
-
-.line {
-    height: 20px;
-    background: $foreground;
-    font-size: small;
-    display: flex;
+    justify-content: flex-start;
     align-items: center;
-    justify-content: center;
-    color: white;
+    gap: 20px;
 }
 
-.footer {
-    clear: both;
-    height: 100px;
-    width: 960px;
-    background: $background;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+.content-wrapper {
+    padding-top: 20px;
 }
 
+.nav-container {
+    display: flex;
+    gap: 20px;
+}
 
+.nav-buttons {
+    display: flex;
+    gap: 20px;
+    flex-grow: 2;
+}
+
+.toolbar-link {
+    text-decoration: none;
+    color: inherit;
+}
 </style>

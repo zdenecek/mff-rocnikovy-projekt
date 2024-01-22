@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       federationId: {
-        type: Sequelize.NUMBER
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

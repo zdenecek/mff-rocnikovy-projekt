@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+
+
 module.exports = (sequelize, DataTypes) => {
   class Player extends Model {
     /**
@@ -10,17 +12,24 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Player.belongsToMany(models.Result, {
+        through: models.PlayerResult,
+        foreignKey: 'playerId',
+        as: 'results'
+      });
     }
   }
   Player.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     birthdate: DataTypes.DATE,
-    federationId: DataTypes.NUMBER
+    federationId: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Player',
+    defaultScope: {
+      attributes: { exclude: ['birthdate', 'createdAt', 'updatedAt'] },
+    },
   });
   return Player;
 };

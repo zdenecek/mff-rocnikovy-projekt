@@ -27,6 +27,10 @@ module.exports = {
       externalDocumentationLink: {
         type: Sequelize.STRING
       },
+      type: {
+        type: Sequelize.ENUM,
+        values: ['individual', 'pair', 'team']
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

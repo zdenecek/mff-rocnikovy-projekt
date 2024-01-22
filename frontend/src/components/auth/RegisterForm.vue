@@ -34,17 +34,12 @@ function register() {
 <template>
     <form ref="form">
         <input-field label="Email" type="email" required v-model="email" :errors="errors?.email"></input-field>
-        <input-field label="Jméno" type="text"  required v-model="name" :errors="errors?.name"></input-field>
-        <input-field label="Heslo" type="password" minlength="8" required v-model="password" :errors="errors?.password"></input-field>
-        <input-field label="Potvrdit heslo" type="password" minlength="8"  required v-model="confirmPassword"
-                     :errors="errors?.password_confirmation"></input-field>
+        <input-field label="Jméno" type="text" required v-model="name" :errors="errors?.name"></input-field>
+        <input-field label="Heslo" type="password" minlength="8" required v-model="password"
+            :errors="errors?.password"></input-field>
+        <input-field label="Potvrdit heslo" type="password" minlength="8" required v-model="confirmPassword"
+            :errors="errors?.password_confirmation"></input-field>
         <input type="submit" @click.prevent="register" value="Registrovat" />
         <router-link :to="{ name: 'login' }">Přihlášení</router-link>
     </form>
 </template>
-
-
-
-<style lang="scss">
-@import "@/style/auth-forms.scss";
-</style>

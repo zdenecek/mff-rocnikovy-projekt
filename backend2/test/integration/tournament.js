@@ -65,6 +65,28 @@ describe('Tournament API', () => {
           .expect('Content-Type', /json/)
           .expect(201);
       });
+
+      it('should return 400 for missing title', async () => {
+        const res = await request(app)
+          .post('/tournaments')
+          .send({
+            startDate: '2021-01-01',
+          })
+          .expect('Content-Type', /json/)
+          .expect(400)
+          .expect((res) => { res.body.success = false, res.body.code = 'validation-error' });
+      });
+
+      it('should return 400 for missing start date', async () => {
+        const res = await request(app)
+          .post('/tournaments')
+          .send({
+            title: 'Hello world',
+          })
+          .expect('Content-Type', /json/)
+          .expect(400)
+          .expect((res) => { res.body.success = false, res.body.code = 'validation-error' });
+      });
     });
   });
 

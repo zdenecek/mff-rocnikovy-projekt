@@ -1,16 +1,17 @@
-
-
 export class Player {
+  id: number;
+  firstName: string;
+  lastName: string;
+  federationId?: string;
 
-    id: number;
-    name: string;
-    federation_id?: number;
+  constructor(data: Player) {
+    this.id = data.id;
+    this.firstName = data.firstName;
+    this.lastName = data.lastName;
+    this.federationId = data.federationId;
+  }
 
-
-    constructor(data: Player) {
-        this.id = data.id;
-        this.name = data.name;
-        this.federation_id = data.federation_id;
-    }
-
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }

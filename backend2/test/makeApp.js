@@ -5,15 +5,16 @@ const makeApp = require('../src/makeApp');
 
 function getApp({
   user = null,
+  keepAuth = false,
 } = {}) {
 
-  if (user !== undefined) {
+  if (!keepAuth) {
     sinon.stub(auth, 'init').callsFake((app) => {
       app.use((req, res, next) => {
         if (app.user) {
           req.user = app.user;
           req.isAuthenticated = true;
-        } 
+        }
         if (app.userOnce) {
           app.user = null;
           app.userOnce = false;
@@ -24,25 +25,25 @@ function getApp({
   }
 
   const app = makeApp();
-
-  app.setUser = (user) => {
-    app.user = user;
-  }
-  app.setUserOnce = (user) => {
-    app.setUser(user);
-    app.userOnce = true;
-  }
-
-  if (user !== null) {
-    app.setUser(user);
-  }
-
-  if (user !== undefined) {
+  
+  if (!keepAuth) {
     auth.init.restore();
+
+    app.setUser = (user) => {
+      app.user = user;
+    }
+    app.setUserOnce = (user) => {
+      app.setUser(user);
+      app.userOnce = true;
+    }
+
+    if (user !== null) {
+      app.setUser(user);
+    }
   }
 
   return app;
 }
 
 
-module.exports =  getApp ;
+module.exports = getApp;

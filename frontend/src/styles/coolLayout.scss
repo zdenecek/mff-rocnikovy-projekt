@@ -1,0 +1,15 @@
+@use "@/styles/colors.scss" as *;
+
+h2 {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    color: $primary;
+}
+
+
+th {
+    font-size: 1.2em;
+    color: $primary;
+    text-transform: uppercase;
+
+}

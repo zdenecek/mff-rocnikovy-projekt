@@ -5,7 +5,7 @@ const MongoStore = require("connect-mongo");
 const session = require("express-session");
 
 function init(app) {
-  const dbUrl = process.env.DB_URL || "mongodb://localhost:27017";
+  const dbUrl = process.env.MONGO_DB_URL || "mongodb://localhost:27017";
 
   app.use(
     session({

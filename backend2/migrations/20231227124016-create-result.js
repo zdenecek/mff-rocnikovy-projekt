@@ -1,4 +1,7 @@
 'use strict';
+
+const { all } = require('../routes/tournament');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -12,20 +15,20 @@ module.exports = {
       scoreAchieved: {
         type: Sequelize.NUMBER
       },
-      unitId: {
+      rank: {
         type: Sequelize.NUMBER
       },
       tournamentId: {
         type: Sequelize.NUMBER
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      title: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
+      externalDocumentationLink: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

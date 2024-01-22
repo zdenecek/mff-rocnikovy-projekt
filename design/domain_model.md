@@ -1,5 +1,7 @@
 
 
+
+
 ```plantuml
 @startuml
 top to bottom direction
@@ -24,8 +26,8 @@ enum TournamentType {
 
 Tournament -- TournamentType : has type
 
-class Category
-class Tag
+class Category {}
+class Tag {}
 
 Tournament "*" -- "0..*" Category : has category
 Tournament "*" -- "0..*" Tag : has tag
@@ -43,7 +45,7 @@ class ResultScoring
 Result -- "*" ScoreResult : achieves score
 ScoreResult -- "1" ResultScoring : belongs to
 
-class Series 
+class Series {}
 
 
 Series -- Tournament : has tournament

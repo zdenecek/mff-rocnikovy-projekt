@@ -1,73 +1,109 @@
-import { UserServiceContract } from "@/service/UserServiceContract";
-import HomeView from "@/views/HomeView.vue";
-import MainView from "@/views/MainView.vue";
-import UsersView from "@/views/UsersView.vue";
-import { container } from "tsyringe";
+import CoolLayoutVue from "@/layouts/CoolLayout.vue";
 import { RouteRecordRaw } from "vue-router";
+import { h } from "vue";
+import { RouterView } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
-    {
-        path: "/main",
-        component: MainView,
-        children: [
-            {
-                name: "home",
-                path: "/",
-                component: HomeView,
-            },
-            {
-                name: "tournaments",
-                path: "/turnaje",
-                component: () => import("../views/TournamentsView.vue"),
-            },
-            {
-                path: "/hraci",
-                name: "players",
-            component: () => import("../views/PlayersView.vue"),
-            },
-            {
-                path: "/admin",
-                name: "admin",
-                component: () => import("../views/AdminView.vue"),
-                children: [
-                    {
-                        path: "users",
-                        name: "users",
-                        component: UsersView,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        path: "/prihlaseni",
-        name: "login",
+  {
+    path: "/main",
+    component: CoolLayoutVue,
+    children: [
+      {
+        name: "home",
+        path: "/",
+        component: () => import("@/views/HomeView.vue"),
+      },
+      {
+        name: "tournaments",
+        path: "/turnaje",
+        component: () => import("@/views/TournamentView.vue"),
         meta: {
-            title: "Login",
+          subnav: [
+            { name: "tournaments", text: "Republikové" },
+            { name: "tournaments", text: "HABRA" },
+            { name: "tournaments", text: "Klubové" },
+            { name: "tournaments", text: "Přihlášky" },
+          ],
         },
-        component: () => import("../views/LoginView.vue"),
-    },
-    {
-        path: "/registrace",
-        name: "register",
-        component: () => import("../views/RegisterView.vue"),
-    },
-    {
-        path: "/odhlaseni",
-        name: "logout",
-        redirect: () => {
-            container
-                .resolve<UserServiceContract>("UserServiceContract")
-                .logout();
-            return { name: "home", reload: true };
+      },
+      {
+        name: "players",
+        path: "/hraci",
+        component: () => import("@/views/PlayersView.vue"),
+        meta: {
+          subnav: [
+            { name: "players", text: "Hráči" },
+            { name: "players", text: "Páry" },
+            { name: "players", text: "Ranking" },
+            { name: "players", text: "Výkonnostní třídy" },
+            { name: "players", text: "Síň slávy" },
+            { name: "players", text: "Reprezentace" },
+          ],
         },
-    },
-    {
-        path: "/chyba",
-        name: "error",
-        props: true,
-        component: () => import("../views/ErrorView.vue"),
-    },
+      },
+
+      {
+        name: "series",
+        path: "/serie",
+        component: () => import("@/views/SeriesView.vue"),
+      },
+ 
+      {
+        path: "/admin",
+        component: { render: () => h(RouterView) },
+        children: [
+          {
+            name: "admin",  
+            path: "",
+            component: () => import("@/views/admin/AdminView.vue"),
+          },
+          {
+            name: "admin-add-tournament",
+            path: "/admin/addTournament",
+            component: () =>
+              import("@/views/admin/tournament/AddTournamentView.vue"),
+          },
+          {
+            name: "admin-tournament-list",
+            path: "/admin/tournamentList",
+            component: () =>
+              import("@/views/admin/tournament/TournamentListView.vue"),
+          },
+          {
+            name: "admin-player-list",
+            path: "/admin/playerList",
+            component: () => import("@/views/admin/player/PlayerListView.vue"),
+          },
+          {
+            name: "admin-add-player",
+            path: "/admin/addPlayer",
+            component: () => import("@/views/admin/player/AddPlayerView.vue"),
+          },
+          {
+            name: "admin-import-players",
+            path: "/admin/importPlayers",
+            component: () =>
+              import("@/views/admin/player/ImportPlayersView.vue"),
+          },
+          {
+            name: "admin-series-list",
+            path: "/admin/seriesList",
+            component: () => import("@/views/admin/series/SeriesListView.vue"),
+          },
+          {
+            name: "admin-add-series",
+            path: "/admin/addSeries",
+            component: () => import("@/views/admin/series/AddSeriesView.vue"),
+          },
+          {
+            name: "admin-user-list",
+            path: "/admin/userList",
+            component: () => import("@/views/admin/user/UserListView.vue"),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default routes;
