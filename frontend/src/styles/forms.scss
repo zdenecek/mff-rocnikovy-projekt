@@ -1,0 +1,25 @@
+
+.form {
+
+h2 {
+    margin-bottom: 1em;
+}
+
+.fields {
+    display: flex;
+    gap: 0.8em;
+    flex-direction: column;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1em;
+    margin-top: 2em;
+}
+
+.submit {
+    background: linear-gradient(to right, $secondary, $primary);
+}
+}

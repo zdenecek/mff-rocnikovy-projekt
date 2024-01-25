@@ -65,7 +65,7 @@ import { errorToast, infoToast } from '@/toasts';
         await playerStore.addPlayer(playerData.lastName, playerData.firstName, playerData.federationId);
         infoToast("Hráč byl přidán.");
         resetForm();
-    } catch (error: unknown) {
+    } catch (error: any) {
         errorToast("Nepodařilo se přidat hráče: " + error.response?.data?.code);
         console.debug(error.message);
     }

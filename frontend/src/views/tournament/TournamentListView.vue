@@ -7,6 +7,13 @@
     <v-row>
         <v-col>
             <v-data-table :headers="headers" :items="tournaments" item-key="id" :loading="loading">
+                <template v-slot:item.title="{ item }">
+                    <td>
+                        <router-link :to="{ name: 'tournament', params: { id: item.id, slug: item.slug } }">
+                            {{ item.title }}
+                        </router-link>
+                    </td>
+                </template>
             </v-data-table>
         </v-col>
     </v-row>
@@ -19,6 +26,7 @@ import { computed } from 'vue';
 const headers = [
     { title: 'Turnaj', value: 'title', width: '35%' },
     { title: 'Datum', value: 'dateString', width: '20%' },
+    { title: 'Počet účastníků', value: 'resultsCount' },
     { title: 'Místo konání', value: 'place', width: "20%" },
     { title: '', },
 ]

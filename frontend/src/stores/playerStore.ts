@@ -10,6 +10,7 @@ export const usePlayerStore = () => {
       loading: false,
       _initialized: false,
     }),
+
     actions: {
       async fetchPlayers() {
         console.debug("fetching players");

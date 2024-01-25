@@ -9,6 +9,10 @@
   box-sizing: border-box;
 }
 
+a {
+  color: inherit;
+}
+
 .flex {
   display: flex;
   gap: 4px 4px;
@@ -19,6 +23,8 @@
 }
 
 .flex-col {
+  display: flex;
+  gap: 4px 4px;
   flex-direction: column;
 }
 
@@ -34,6 +40,11 @@
 .justify-end {
   justify-content: flex-end;
 }
+
+.align-stretch {
+  align-items: stretch;
+}
+
 
 .aling-center {
   align-items: center;

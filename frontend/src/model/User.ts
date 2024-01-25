@@ -1,10 +1,11 @@
-type UserFilter = {
+export type UserFilter = {
   query?: string;
 };
 
-class User {
+export class User {
   id?: number;
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   role?: unknown;
 
@@ -16,5 +17,3 @@ class User {
     return false;
   }
 }
-
-export { User, UserFilter };

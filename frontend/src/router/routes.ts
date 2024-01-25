@@ -5,26 +5,49 @@ import { RouterView } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/main",
+    path: "/",
     component: CoolLayoutVue,
     children: [
       {
         name: "home",
         path: "/",
+
         component: () => import("@/views/HomeView.vue"),
       },
       {
-        name: "tournaments",
         path: "/turnaje",
-        component: () => import("@/views/TournamentView.vue"),
+        component: { render: () => h(RouterView) },
+
         meta: {
           subnav: [
-            { name: "tournaments", text: "Republikové" },
-            { name: "tournaments", text: "HABRA" },
-            { name: "tournaments", text: "Klubové" },
-            { name: "tournaments", text: "Přihlášky" },
+            { to: { name: "tournaments" }, text: "Republikové" },
+            { to: { name: "tournaments" }, text: "HABRA" },
+            { to: { name: "tournaments" }, text: "Klubové" },
+            {
+              to: {
+                name: "redirect",
+                params: {
+                    href: "https://docs.google.com/spreadsheets/d/1xYc3QqQcsWlYdgIhdQLDLN2DBV59ewbwYwaWfvtXWfY/edit#gid=1977226379"
+                }
+                
+              },
+              text: "Přihlášky",
+            },
           ],
         },
+        children: [
+          {
+            path: "",
+            name: "tournaments",
+            component: () =>
+              import("@/views/tournament/TournamentListView.vue"),
+          },
+          {
+            path: ":id/:slug?",
+            name: "tournament",
+            component: () => import("@/views/tournament/TournamentView.vue"),
+          },
+        ],
       },
       {
         name: "players",
@@ -32,12 +55,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/PlayersView.vue"),
         meta: {
           subnav: [
-            { name: "players", text: "Hráči" },
-            { name: "players", text: "Páry" },
-            { name: "players", text: "Ranking" },
-            { name: "players", text: "Výkonnostní třídy" },
-            { name: "players", text: "Síň slávy" },
-            { name: "players", text: "Reprezentace" },
+            { to: { name: "players" }, text: "Hráči" },
+            { to: { name: "players" }, text: "Páry" },
+            { to: { name: "players" }, text: "Ranking" },
+            { to: { name: "players" }, text: "Výkonnostní třídy" },
+            { to: { name: "players" }, text: "Síň slávy" },
+            { to: { name: "players" }, text: "Reprezentace" },
           ],
         },
       },
@@ -47,13 +70,13 @@ const routes: Array<RouteRecordRaw> = [
         path: "/serie",
         component: () => import("@/views/SeriesView.vue"),
       },
- 
+
       {
         path: "/admin",
         component: { render: () => h(RouterView) },
         children: [
           {
-            name: "admin",  
+            name: "admin",
             path: "",
             component: () => import("@/views/admin/AdminView.vue"),
           },
@@ -104,6 +127,42 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    path: "/",
+    component: () => import("@/layouts/FocusLayout.vue"),
+    children: [
+      {
+        name: "login",
+        path: "/prihlaseni",
+        component: () => import("@/views/user/LoginView.vue"),
+      },
+      {
+        name: "register",
+        path: "/registrace",
+        component: () => import("@/views/user/RegisterView.vue"),
+      },
+      // {
+      //   name: "forgot-password",
+      //   path: "/forgot-password",
+      //   component: () => import("@/views/ForgotPasswordView.vue"),
+      // },
+      // {
+      //   name: "reset-password",
+      //   path: "/reset-password/:token",
+      //   component: () => import("@/views/ResetPasswordView.vue"),
+      // },
+    ],
+  },
+  {
+    name: "redirect",
+    path: "/redirect/:href",
+    component: () => {},
+    beforeEnter: (to) => {
+      window.location.href = to.params.href as string;
+      return false;
+    }
+  },
+
 ];
 
 export default routes;

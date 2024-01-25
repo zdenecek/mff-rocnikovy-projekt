@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const {Tournament, Result, Player} = require('../models');
+const { Tournament, Result, Player } = require('../models');
 const { authorize } = require('../src/auth');
 const { check, validationResult } = require('express-validator');
+const Sequelize = require('sequelize');
 
 
 const resultValidators = [
@@ -20,8 +21,18 @@ const resultValidators = [
 ]
 
 // Get all tournaments
-router.get('/',  async (req, res) => {
-  const tournaments = await Tournament.findAll();
+router.get('/', async (req, res) => {
+  const tournaments = await Tournament.findAll({
+    include: [{
+      model: Result,
+      attributes: [], // Exclude Result attributes from the final output
+      as: 'results',
+    }],
+    attributes: {
+      include: [[Sequelize.fn("COUNT", Sequelize.col("results.id")), 'resultsCount']]
+    },
+    group: ['Tournament.id']
+  });
   res.json(tournaments);
 });
 
@@ -32,12 +43,12 @@ router.get('/:id', async (req, res) => {
       {
         model: Result,
         as: 'results',
-        attributes: { exclude: ['tournamentId' ] }, // exclude fields from the Child model
+        attributes: { exclude: ['tournamentId'] }, // exclude fields from the Child model
         include: {
           model: Player,
           as: 'players',
-          through: { attributes: [] } ,
-          attributes: { exclude: ['birthdate', 'createdAt', 'updatedAt' ] } // exclude fields from the Child model
+          through: { attributes: [] },
+          attributes: { exclude: ['birthdate', 'createdAt', 'updatedAt'] } // exclude fields from the Child model
         }
       }
     ]
@@ -51,67 +62,67 @@ router.get('/:id', async (req, res) => {
 
 // Create one tournament
 router.post('/', authorize("admin"),
-[
-  check('title').notEmpty().withMessage('required'),
-  check('startDate').isDate().withMessage('not-valid-date'),
-  check('endDate').optional().isDate().withMessage('not-valid-date'),
-  check('place').optional(),
-  check('description').optional(),
-  check('results').optional().isArray().withMessage('not-valid-array'),
-  check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
-], resultValidators
-, async (req, res) => {
+  [
+    check('title').notEmpty().withMessage('required'),
+    check('startDate').isDate().withMessage('not-valid-date'),
+    check('endDate').optional().isDate().withMessage('not-valid-date'),
+    check('place').optional(),
+    check('description').optional(),
+    check('results').optional().isArray().withMessage('not-valid-array'),
+    check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
+  ], resultValidators
+  , async (req, res) => {
 
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, code: "validation-error", errors: errors.array() });
-  }
-
-  const { results, ...tournamentData } = req.body;
-  const tournament = await Tournament.create(tournamentData, {include: ['results']});
-
-  if (results) {
-    for (const resultData of results) {
-      const { players, ...resultInfo } = resultData;
-      const result = await Result.create(resultInfo);
-
-      for (const playerData of players) {
-        let player;
-        if (playerData.type === 'create') {
-          player = await Player.create(playerData);
-        } else {
-          player = await Player.findByPk(playerData.id);
-        }
-
-        if (player) {
-          const unit = await Unit.create({ name: player.lastName });
-          await unit.setPlayer(player);
-          await result.setUnit(unit);
-        }
-      }
-
-      await tournament.addResult(result);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, code: "validation-error", errors: errors.array() });
     }
-  }
+
+    const { results, ...tournamentData } = req.body;
+    const tournament = await Tournament.create(tournamentData, { include: ['results'] });
+
+    if (results) {
+      for (const resultData of results) {
+        const { players, ...resultInfo } = resultData;
+        const result = await Result.create(resultInfo);
+
+        for (const playerData of players) {
+          let player;
+          if (playerData.type === 'create') {
+            player = await Player.create(playerData);
+          } else {
+            player = await Player.findByPk(playerData.id);
+          }
+
+          if (player) {
+            const unit = await Unit.create({ name: player.lastName });
+            await unit.setPlayer(player);
+            await result.setUnit(unit);
+          }
+        }
+
+        await tournament.addResult(result);
+      }
+    }
 
 
-  res.status(201).json(tournament);
-});
+    res.status(201).json(tournament);
+  });
 
 // Update one tournament
-router.patch('/:id', authorize("admin"),[
+router.patch('/:id', authorize("admin"), [
   check('title').optional().notEmpty().withMessage('required'),
   check('startDate').optional().isDate().withMessage('not-valid-date'),
   check('endDate').optional().isDate().withMessage('not-valid-date'),
   check('place').optional(),
   check('description').optional(),
   check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url'),
-  
+
 ], resultValidators, async (req, res) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false,code: "validation-error", errors: errors.array() });
+    return res.status(400).json({ success: false, code: "validation-error", errors: errors.array() });
   }
 
   const tournament = await Tournament.findByPk(req.params.id);

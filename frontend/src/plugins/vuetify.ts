@@ -21,13 +21,18 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-          primary: "#1565C0",
-          secondary: "#5CBBF6",
+          primary: "#163558",
+          secondary: "#0094fa",
         },
       },
     },
   },
   defaults: {
+    VBtn: {
+      variant: "text",
+      color: "primary",
+      dark: true,
+    },
     VDataTable: {
       itemsPerPageText: "Záznamů na stránku",
       noDataText: "Žádná data k zobrazení",

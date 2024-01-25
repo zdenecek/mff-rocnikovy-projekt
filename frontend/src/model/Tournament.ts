@@ -1,22 +1,17 @@
+import { makeSlug } from "@/util/url";
 import { Player } from "./Player";
 
-export class Unit {
-  title?: string;
-  players: Player[];
-
-  constructor(data: Unit) {
-    this.title = data.title;
-    this.players = data.players.map((player) => new Player(player));
-  }
-}
-
 export class Result {
+  rank: number;
   scoreAchieved: number;
-  unit: Unit;
+  players: Player[];
+  title?: string;
 
   constructor(data: Result) {
+    this.rank = data.rank;
     this.scoreAchieved = data.scoreAchieved;
-    this.unit = new Unit(data.unit);
+    this.players = data.players.map((player) => new Player(player));
+    this.title = data.title;
   }
 }
 
@@ -31,6 +26,7 @@ export class Tournament {
   endDate?: Date;
   externalDocumentationLink?: string;
   type: TournamentType;
+  resultsCount?: number;
 
   results?: Result[];
 
@@ -46,7 +42,8 @@ export class Tournament {
 
     if (data.results) {
       this.results = data.results.map((result) => new Result(result));
-    }
+      this.resultsCount = this.results.length;
+    } else if (data.resultsCount) this.resultsCount = data.resultsCount;
   }
 
   get dateString(): string {
@@ -59,5 +56,9 @@ export class Tournament {
     }
 
     return "";
+  }
+
+  get slug(): string {
+    return makeSlug(this.title);
   }
 }

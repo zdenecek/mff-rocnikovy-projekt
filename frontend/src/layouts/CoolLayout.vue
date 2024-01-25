@@ -24,15 +24,34 @@
                                 </v-col>
 
                                 <v-col cols="2" class="account-section justify-end">
-                                    <span class="name">Zdeněk</span>
-                                    <v-avatar size="50">
-                                        <v-img :src="avatar1" />
-                                    </v-avatar>
+                                    <v-menu v-if="user">
+                                        <template v-slot:activator="{ props }">
+                                            <v-list nav  v-bind="props">
+                                                <v-list-item link> 
+                                                    <template v-slot:append>
+                                                        <v-avatar size="50">
+                                                            <v-img :src="avatar1" />
+                                                        </v-avatar>
+                                                    </template>
+                                                    <span class="name"> {{ user?.firstName }}</span>
+                                                </v-list-item>
+                                            </v-list>
+                                        </template>
+                                        <v-list density="comfortable">
+                                            <v-list-item @click-once="authStore.logout">
+                                                <v-list-item-title>Odhlásit</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                    <v-btn v-else :to="{ name: 'login' }" variant="text" class="login-link" color="primary"
+                                        size="large">
+                                        Přihlásit se
+                                    </v-btn>
                                 </v-col>
                             </v-row>
                             <v-row v-if="subNav">
                                 <v-col cols="9" class="subnav flex">
-                                    <router-link :to="{ name: item.name}"  v-for="item in subNav">
+                                    <router-link :to="item.to" v-for="item in subNav">
                                         {{ item.text }}
                                     </router-link>
 
@@ -68,6 +87,7 @@
 
 <script setup lang="ts">
 import avatar1 from "@/assets/avatar2.png";
+import { useAuthStore } from "@/stores/authStore";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 const topNavButtons = [
@@ -86,7 +106,10 @@ const topNavButtons = [
 ]
 
 const route = useRoute();
-const subNav = computed( () => route.meta.subnav as { name: string; text: string }[] | undefined);
+const subNav = computed(() => route.meta.subnav as { to: any; text: string }[] | undefined);
+
+const authStore = useAuthStore();
+const user = computed(() => authStore.user);
 </script>
 
 <style lang="scss" scoped>
@@ -115,9 +138,19 @@ const subNav = computed( () => route.meta.subnav as { name: string; text: string
     }
 }
 
+.account-section {
+    .v-list {
+        padding: 0;
+
+        .v-list-item {
+            padding: 0;
+            padding-left: 1.2em;
+            border-radius: 20px;
+        }
+    }
+}
 
 /* LOGO HEADER */
-
 .logo-header-wrapper {
     display: flex;
     flex-direction: column;
@@ -132,15 +165,12 @@ const subNav = computed( () => route.meta.subnav as { name: string; text: string
 }
 
 /* MAIN NAVIGATION */
-
 .toolbar-link,
 .router-link,
 .link {
     text-decoration: none;
     color: inherit;
 }
-
-
 
 .nav-buttons {
     display: flex;
@@ -170,6 +200,7 @@ const subNav = computed( () => route.meta.subnav as { name: string; text: string
     }
 }
 
+
 .account-section {
     display: flex;
     align-items: center;
@@ -179,7 +210,6 @@ const subNav = computed( () => route.meta.subnav as { name: string; text: string
         font-size: 1.2em;
     }
 }
-
 
 .subnav {
     outline: 1px solid transparent;
@@ -217,7 +247,6 @@ const subNav = computed( () => route.meta.subnav as { name: string; text: string
     }
 
 }
-
 
 /* FOOTER */
 .footer {
