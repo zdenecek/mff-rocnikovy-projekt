@@ -11,7 +11,7 @@
            <v-text-field label="Přijmení" v-model="playerData.lastName" :rules="rules.lastName" required></v-text-field>
            <v-text-field label="Číslo hráče ČBS" v-model="playerData.federationId" :rules="rules.federationId"></v-text-field>
            <v-text-field label="Datum narození" type="date" v-model="playerData.birthdate" :rules="rules.birthdate"></v-text-field>
-           <v-btn color="primary" type="submit">Vytvořit</v-btn>
+           <v-btn color="primary" variant="flat" type="submit">Vytvořit</v-btn>
          </v-form>
        </v-col>
     </v-row>

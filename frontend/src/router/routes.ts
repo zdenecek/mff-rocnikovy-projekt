@@ -52,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: "players",
         path: "/hraci",
-        component: () => import("@/views/PlayersView.vue"),
+        component: () => import("@/views/player/PlayerListView.vue"),
         meta: {
           subnav: [
             { to: { name: "players" }, text: "Hráči" },
@@ -82,45 +82,45 @@ const routes: Array<RouteRecordRaw> = [
           },
           {
             name: "admin-add-tournament",
-            path: "/admin/addTournament",
+            path: "/admin/pridat-turnaj",
             component: () =>
               import("@/views/admin/tournament/AddTournamentView.vue"),
           },
           {
             name: "admin-tournament-list",
-            path: "/admin/tournamentList",
+            path: "/admin/prehled-turnaju",
             component: () =>
               import("@/views/admin/tournament/TournamentListView.vue"),
           },
           {
             name: "admin-player-list",
-            path: "/admin/playerList",
+            path: "/admin/prehled-hracu",
             component: () => import("@/views/admin/player/PlayerListView.vue"),
           },
           {
             name: "admin-add-player",
-            path: "/admin/addPlayer",
+            path: "/admin/pridat-hrace",
             component: () => import("@/views/admin/player/AddPlayerView.vue"),
           },
           {
             name: "admin-import-players",
-            path: "/admin/importPlayers",
+            path: "/admin/importovat-hrace",
             component: () =>
               import("@/views/admin/player/ImportPlayersView.vue"),
           },
           {
             name: "admin-series-list",
-            path: "/admin/seriesList",
+            path: "/admin/prehled-serii",
             component: () => import("@/views/admin/series/SeriesListView.vue"),
           },
           {
             name: "admin-add-series",
-            path: "/admin/addSeries",
+            path: "/admin/pridat-serii",
             component: () => import("@/views/admin/series/AddSeriesView.vue"),
           },
           {
             name: "admin-user-list",
-            path: "/admin/userList",
+            path: "/admin/prehled-uzivatelu",
             component: () => import("@/views/admin/user/UserListView.vue"),
           },
         ],

@@ -38,7 +38,10 @@ export const usePlayerStore = () => {
           federationId,
         });
         this.players.push(response.data);
-      }
+      },
+      async importPlayers(importName: string, data: any): Promise<void> {
+        alert("Hi")
+      },
     },
   });
 
