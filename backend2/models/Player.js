@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { categorizePlayer } = require('../src/playerCategory');
 
 
 module.exports = (sequelize, DataTypes) => {
@@ -23,13 +24,31 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     birthdate: DataTypes.DATE,
-    federationId: DataTypes.STRING
+    federationId: DataTypes.STRING,
+    category: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        const birthdate = this.getDataValue('birthdate');
+
+        return categorizePlayer(birthdate); 
+      },
+      set(value) {
+        throw new Error('Category cannot be set');
+      }
+    }
   }, {
     sequelize,
     modelName: 'Player',
-    defaultScope: {
-      attributes: { exclude: ['birthdate', 'createdAt', 'updatedAt'] },
-    },
+    scopes: {
+      accessLevel(role) {
+        if(role === 'admin') return {
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        }
+        return {
+          attributes: { exclude: ['birthdate', 'createdAt', 'updatedAt'] }
+        }
+      },
+    }
   });
   return Player;
 };

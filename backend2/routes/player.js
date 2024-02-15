@@ -6,13 +6,18 @@ const { check, validationResult } = require('express-validator');
 
 // Get all players
 router.get('/', async (req, res) => {
-  const players = await Player.findAll();
+  const players = await Player.findAll({
+    scope: { method: ['accessLevel', req.user?.role] }
+  });
   res.json(players);
 });
 
 // Get one player
 router.get('/:id', async (req, res) => {
-  const player = await Player.findByPk(req.params.id);
+  const player = await Player.findByPk(req.params.id, {
+    scope: { method: ['accessLevel', req.user?.role] }
+  }
+  );
   if (player) {
     res.json(player);
   } else {
@@ -29,7 +34,7 @@ router.post('/', authorize("admin"), [
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success:false, code:"validation-error", errors: errors.array() });
+    return res.status(400).json({ success: false, code: "validation-error", errors: errors.array() });
   }
 
   const player = await Player.create(req.body);
@@ -45,7 +50,7 @@ router.patch('/:id', authorize("admin"), [
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({success:false, code:"validation-error", errors: errors.array() });
+    return res.status(400).json({ success: false, code: "validation-error", errors: errors.array() });
   }
 
   const player = await Player.findByPk(req.params.id);

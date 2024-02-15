@@ -18,7 +18,6 @@ module.exports = {
  async createPlayer() {
    const firstName = faker.person.firstName();
    const lastName = faker.person.lastName();
-   const birthdate = faker.date.past();
    const federationId = Math.floor(Math.random() * 4000 + 1);
 
    // Create a player
