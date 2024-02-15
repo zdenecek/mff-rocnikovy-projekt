@@ -1,0 +1,73 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27018:27017"
+    restart: always
+
+  mysql:
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: matrika
+      MYSQL_USER: matrika
+      MYSQL_PASSWORD: matrika
+    ports:
+      - "3307:3306"
+    restart: always
+
+  api:
+    build: ./backend2
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_DB_URL=mongodb://mongo:27018/matrika
+      - MYSQL_DB_URL=mysql://matrika:matrika@mysql:3307/matrika
+      - PORT=3003
+      - LOG_FILE=/var/log/matrika.log
+      - LOG_LEVEL=debug
+      - SECRET=trumpisgay
+      - ADMIN_PASSWORD=admin
+      - ADMIN_USERNAME=admin
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend2:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build: ./frontend
+    environment:
+      - VUE_APP_API_URL=http://localhost:3003/
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+    depends_on:
+      - api
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  migrate:
+    build: ./backend2
+    environment:
+      - MONGO_DB_URL=mongodb://mongo:27018/matrika
+      - MYSQL_DB_URL=mysql://matrika:matrika@mysql:3306/matrika
+    depends_on:
+      - mongo
+      - mysql
+    restart: no
+    command: >
+      sh -c "npm run migrate &&
+             npm run seed"
+    volumes:
+      - ./backend2:/usr/src/app
+      - /usr/src/app/node_modules
+
+
+volumes:
+  mongo-data:
