@@ -19,6 +19,7 @@ module.exports = {
    const firstName = faker.person.firstName();
    const lastName = faker.person.lastName();
    const federationId = Math.floor(Math.random() * 4000 + 1);
+    const birthdate = faker.date.between({ from: '1950-01-01', to: '2003-12-31'});
 
    // Create a player
    const player = await Player.create({
