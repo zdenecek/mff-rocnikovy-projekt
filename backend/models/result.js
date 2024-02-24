@@ -24,10 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Result.init({
-    scoreAchieved: DataTypes.NUMBER,
+    scoreAchieved: DataTypes.INTEGER,
     title: DataTypes.STRING,
-    tournamentId: DataTypes.NUMBER,
-    rank: DataTypes.NUMBER,
+    tournamentId: DataTypes.INTEGER,
+    rank: DataTypes.INTEGER,
     externalDocumentationLink: DataTypes.STRING,
   
   }, {

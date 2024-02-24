@@ -1,7 +1,7 @@
 {
   "development": {
-    "storage": "/Users/zdenek.tomis/src/personal/matrikabs/backend/dev.db",
-    "dialect": "sqlite"
+    "use_env_variable": "DB_URL",
+    "dialect": "mysql"
   },
   "test": {   
     "storage": "test.db",

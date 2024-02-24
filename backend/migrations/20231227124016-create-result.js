@@ -13,13 +13,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       scoreAchieved: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       rank: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       tournamentId: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       title: {
         type: Sequelize.STRING,

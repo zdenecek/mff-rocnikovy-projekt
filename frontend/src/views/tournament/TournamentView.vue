@@ -6,15 +6,29 @@
     </v-row>
     <v-row>
         <v-col cols="4">
-            <div v-if="tournament">
-                <p>Place: {{ tournament.place }}</p>
-                <p>Description: {{ tournament.description }}</p>
-                <p>Start Date: {{ tournament.startDate }}</p>
-                <p>End Date: {{ tournament.endDate }}</p>
-                <p>External Documentation Link: {{ tournament.externalDocumentationLink }}</p>
-                <p>Type: {{ tournament.type }}</p>
+            <p>
+                {{ tournament.description }}
+            </p>
+            <v-table class="pt-4" v-if="tournament">
+                <tbody>
+                    <tr>
+                        <td>{{ tournament.type }}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Místo konání </td>
+                        <td>{{ tournament.place }}</td>
+                    </tr>
+                    <tr>
+                        <td>Datum konání </td>
+                        <td>{{ tournament.dateString }}</td>
+                    </tr>
+                </tbody>
+            </v-table>
+            <div>
+                <v-btn>Dokumentace</v-btn>
             </div>
-        </v-col>
+        </v-col>    
         <v-col cols="8" v-if="tournament?.results">
             <v-data-table :headers="headers" :items="tournament.results" :items-per-page="tournament.results.length"
                 item-key="id">
@@ -94,7 +108,7 @@ const headers = computed(() => {
         ]
     else if (tournament.value?.type === "pair")
         return [
-            { title: 'Pořadí', value: 'rank'},
+            { title: 'Pořadí', value: 'rank' },
             { title: 'Pár', value: 'players' },
             { title: 'Výsledek', value: 'scoreAchieved' },
         ]

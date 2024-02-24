@@ -19,7 +19,12 @@ function makeApp() {
 
   const app = express();
   app.use(logger('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' }));
-  app.use(cors())
+  app.use(cors(
+    {
+      origin: true,
+      credentials: true
+    }
+  ))
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
@@ -29,11 +34,13 @@ function makeApp() {
   mongoose.init(app);
   openapi.init(app);
 
-  app.use('/', indexRouter);
-  app.use('/users', usersRouter);
-  app.use('/players', playersRouter);
-  app.use('/tournaments', tournamentRouter);
-  app.use('/', authRouter);
+  const prefix = "/api/v1"
+
+  app.use(prefix + '/', indexRouter);
+  app.use(prefix + '/users', usersRouter);
+  app.use(prefix + '/players', playersRouter);
+  app.use(prefix + '/tournaments', tournamentRouter);
+  app.use(prefix + '/', authRouter);
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(function (err, req, res, next) {
 

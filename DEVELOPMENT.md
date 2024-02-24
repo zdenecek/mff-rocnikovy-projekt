@@ -25,6 +25,7 @@ Do not use 'root' as the database username, otherwise, the container will not st
 
 Note that if you are on Windows and use WSL2 for Docker, it is advisable to have the project directory in the WSL2 filesystem, otherwise the performance will be abysmal.
 
+Also note that if the mongodb container starts to an unhealthy state, it might help to remove the `mongo` volume and restart the containers.
 
 ### Docker compose services
 
