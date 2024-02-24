@@ -1,7 +1,7 @@
 
 # Bridge tournaments and players database
 
-This project tries to create a service to store, view, and manage results of bridge tournaments and bridge players.
+This project tries to create a service to store, view, and manage the results of bridge tournaments and bridge players.
 
 This is a project for the [Havířov Bridge Academy](https://www.bridzhavirov.cz/).
 
@@ -17,18 +17,18 @@ Basic requirements analysis can be found in the [requirements.md](analysis/requi
 
 A write-up of possible extensions or nice-to-have features can be found in the [extensions.md](analysis/extensions.md) file.
 
-I have decided not to include user stories in the requirements analysis, as I have found them to be too vague and not very useful, especially as the project goal are clean and well defined in requirements
+I have decided not to include user stories in the requirements analysis, as I have found them to be too vague and not very useful, especially as the project goals are clean and well-defined in the requirements
 
 ### Design
 
 The domain model can be found in the [domain_model.md](design/domain_model.md) file.
 
-A very basic usecase diagram to guide the development can be found in the [usecase.md](design/usecase.md) file.
+A very basic use-case diagram to guide the development can be found in the [usecase.md](design/usecase.md) file.
 
 #### Mockups
 Figma mockup for the project is being [gradually worked on at this address](https://www.figma.com/file/7viqnEaCt7VbuPwxjV9PUJ/matrikabs?node-id=102%3A644&t=disWhiQWDYSMkD8x-1).
 
-The design is taken over from the official site of bridge in Havířov to keep the design consistent with the rest of the site, the color palette is changed to distinguish the system from the rest of the site.
+The design is taken over from the official site of the bridge in Havířov to keep the design consistent with the rest of the site, the color palette is changed to distinguish the system from the rest of the site.
 
 Mockups are not a priority and I fully expect to make the designs on the fly as the mockup process can be very time-consuming.
 
@@ -76,7 +76,7 @@ docker compose exec [container_name] /bin/bash
 
 #### Notes
 
-Do not use 'root' as database username, otherwise the container will not start.
+Do not use 'root' as the database username, otherwise, the container will not start.
 
 Note that if you are on Windows and use WSL2 for Docker, it is advisable to have the project directory in the WSL2 filesystem, otherwise the performance will be abysmal.
 
