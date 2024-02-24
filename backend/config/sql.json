@@ -1,6 +1,6 @@
 {
   "development": {
-    "storage": "/Users/zdenek.tomis/src/personal/matrikabs/backend2/dev.db",
+    "storage": "/Users/zdenek.tomis/src/personal/matrikabs/backend/dev.db",
     "dialect": "sqlite"
   },
   "test": {   

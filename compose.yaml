@@ -19,8 +19,8 @@ services:
       - "3307:3306"
     restart: always
 
-  api:
-    build: ./backend2
+  backend:
+    build: ./backend
     ports:
       - "3003:3003"
     environment:
@@ -35,7 +35,7 @@ services:
     depends_on:
       - mongo
     volumes:
-      - ./backend2:/usr/src/app
+      - ./backend:/usr/src/app
       - /usr/src/app/node_modules
 
   frontend:
@@ -53,7 +53,7 @@ services:
       - /usr/src/app/node_modules
 
   migrate:
-    build: ./backend2
+    build: ./backend
     environment:
       - MONGO_DB_URL=mongodb://mongo:27018/matrika
       - MYSQL_DB_URL=mysql://matrika:matrika@mysql:3306/matrika
@@ -65,7 +65,7 @@ services:
       sh -c "npm run migrate &&
              npm run seed"
     volumes:
-      - ./backend2:/usr/src/app
+      - ./backend:/usr/src/app
       - /usr/src/app/node_modules
 
 
