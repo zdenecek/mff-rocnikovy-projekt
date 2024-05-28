@@ -34,11 +34,12 @@ Also note that if the mongodb container starts to an unhealthy state, it might h
 - `mysql` - mysql database
 - `frontend` - frontend
 - `migration` - migration service, run once to migrate mysql database and seed dummy data
+- `test` - test service, run tests
 
 ## Testing
 
 Tests for backend are provided.
-Tests are written using Jest and Supertest.
+Tests are written using Mocha.
 
 To run the tests, run the following command in the `backend` directory:
 
@@ -46,13 +47,19 @@ To run the tests, run the following command in the `backend` directory:
 npm run test
 ```
 
+Notice that you need to provide environment variables for the tests to run.
+
+A simpler way to run the tests is use the provided docker-compose file.
+
+There is a container `test` which runs the tests.
+
 ## CI / CD
 
 The project is set up with Github Actions for CI / CD.
 
 Any push is tested.
 
-Any push to a branch with a name starting with `release` will be deployed to the staging server.
+Any push to a branch with a name starting with `release/` will be deployed to the staging server.
 
 ## Deploying
 

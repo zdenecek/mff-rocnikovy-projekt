@@ -94,7 +94,7 @@ jobs:
           
           echo "VITE_BUILD_TIME=$(date)"  >>.env
       - name: Add environment information to backend
-        working-directory: ./api
+        working-directory: ./backend
         run: echo "${{  env[env.backend_env_secret] }}" | sed 's/\\n/\n/g' >.env
       - name: Build frontend
         working-directory: ./frontend
@@ -108,7 +108,7 @@ jobs:
           username: ${{ env.VPS_USERNAME }}
           password: ${{ env.VPS_PASSWORD }}
           port: ${{ env.VPS_SSH_PORT }}
-          source: "frontend/dist, api/*, scraper/"
+          source: "frontend/dist, backend/*"
           target: "/home/${{ env.VPS_USERNAME }}/${{ env.deployment_name }}/"
       - name: Restart server
         uses: appleboy/ssh-action@master
@@ -123,7 +123,7 @@ jobs:
             mv frontend/dist frontend1
             rm -rf frontend
             mv frontend1 frontend
-            cd $DIR/api
+            cd $DIR/backend
             npm install --production
             # Check if the pm2 process exists and either restart it or start a new one
             if pm2 show ${{ env.deployment_name }} > /dev/null; then
@@ -131,7 +131,7 @@ jobs:
                 pm2 restart ${{ env.deployment_name }}
             else
                 echo "Starting new PM2 process"
-                pm2 start index.js --name ${{ env.deployment_name }} --log /var/log/rr/${{ env.deployment_name }}/api-pm2.log
+                pm2 start index.js --name ${{ env.deployment_name }} --log /var/log/matrikabs/${{ env.deployment_name }}/backend-pm2.log
                 pm2 save
             fi
 
