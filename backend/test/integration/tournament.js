@@ -20,11 +20,12 @@ describe('Tournament API', () => {
   const basePath = '/api/v1';
 
   describe('GET /tournaments', () => {
+
     it('should GET all tournaments', async () => {
       const res = await request(app)
         .get(`${basePath}/tournaments`)
         .expect('Content-Type', /json/)
-        .expect(200);
+        .expect(200)
 
     });
   });
@@ -65,6 +66,8 @@ describe('Tournament API', () => {
           })
           .expect('Content-Type', /json/)
           .expect(201);
+
+        console.log('Validation Errors:', res.body.errors);
       });
 
       it('should return 400 for missing title', async () => {
@@ -100,10 +103,11 @@ describe('Tournament API', () => {
 
         const res = await request(app)
           .put(`${basePath}/tournaments/${tournament.id}`)
-          .send({
-          })
+          .send({})
           .expect('Content-Type', /json/)
           .expect(200);
+
+console.log('Validation Errors:', res.body.errors);
       });
 
       it('should return 404 if tournament does not exist', async () => {
@@ -160,7 +164,7 @@ describe('Tournament API', () => {
         });
 
         const res = await request(app)
-          .delete(`/tournaments/${tournament.id}`)
+          .delete(`${basePath}/tournaments/${tournament.id}`)
           .expect(200);
       });
     });

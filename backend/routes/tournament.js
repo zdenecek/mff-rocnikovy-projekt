@@ -32,7 +32,7 @@ const resultValidators = [
     }
     return true;
   }),
-  check('results').custom(uniquePlayerIds),
+  check('results').optional().custom(uniquePlayerIds),
 ]
 
 // Get all tournaments
@@ -164,13 +164,18 @@ router.delete('/:id', authorize("admin"), async (req, res) => {
 });
 
 
+
 router.post('/delete', authorize("admin"), [
-  check('ids').isArray().withMessage('no>t-an-array'),
+  check('ids').isArray().withMessage('not-an-array'),
   check('ids.*').isNumeric().withMessage('not-a-number')
 ], async (req, res) => {
  const result =  await Tournament.destroy({ where: { id: req.body.ids } });
   res.json({ success: true, result });
 });
 
+router.delete('/:id', authorize("admin"), async (req, res) => {
+  const result = await Tournament.destroy({ where: { id: req.params.id } });
+  res.json({ success: true, result });
+});
 
 module.exports = router;

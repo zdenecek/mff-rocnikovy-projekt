@@ -62,11 +62,11 @@ router.patch('/:id', authorize("admin"), [
     const data = only(req.body, [
       'firstName', 'lastName', 'birthdate', 'federationId'
     ]);
-    console.log(data)
+
     await player.update(data);
-    res.json({ success: true, player });
+    return res.json({ success: true, player });
   } else {
-    res.status(404).json({ success: false, code: 'not-found' });
+    return res.status(404).json({ success: false, code: 'not-found' });
   }
 });
 
