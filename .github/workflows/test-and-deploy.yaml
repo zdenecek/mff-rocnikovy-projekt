@@ -54,7 +54,7 @@ jobs:
 
     needs: test_backend
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/heads/release/')
+    if: startsWith(github.ref, 'refs/heads/release')
     env:
       deployment_name: 'dev'
       frontend_env_secret: 'FRONTEND_ENV'
