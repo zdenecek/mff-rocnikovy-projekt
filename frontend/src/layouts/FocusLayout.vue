@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-container class="fill-height" fluid>
+        <v-container class="fill-height">
             <v-row align="center" justify="center">
                 <v-col cols="12" sm="10" md="6" lg="4">
                     <router-view />

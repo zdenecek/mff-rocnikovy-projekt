@@ -2,9 +2,9 @@
 
 
 paths:
-  /auth/login:
+  /login/password:
     post:
-      summary: User login
+      summary: User login with password
       operationId: loginUser
       tags:
         - Authentication
@@ -38,7 +38,7 @@ paths:
         '401':
           description: Authentication failed
 
-  /auth/logout:
+  /logout:
     post:
       summary: User logout
       operationId: logoutUser
@@ -55,10 +55,11 @@ paths:
                   success:
                     type: boolean
 
-  /auth/change-password:
+  /change-password:
     post:
       summary: Change user password
       tags:
+        - Authentication
         - User
       requestBody:
         required: true
@@ -85,11 +86,12 @@ paths:
         '401':
           description: Unauthorized
 
-  /auth/register:
+  /register:
     post:
       summary: Register a new user
       operationId: registerUser
       tags:
+        - Authentication
         - User
       requestBody:
         required: true

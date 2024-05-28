@@ -19,7 +19,7 @@ a {
 }
 
 .flex.spaced {
-  gap: 4px 32px;
+  gap: 4px 16px;
 }
 
 .flex-col {
@@ -72,4 +72,16 @@ a {
 
 ul {
   list-style-type: none;
+}
+
+@media (max-width: 600px) { /* Adjust 600px based on your definition of 'small screen' */
+  .v-col {
+    padding-left: 0 !important; /* Removes padding */
+    padding-right: 0 !important; /* Removes padding */
+  }
+
+  .v-card {
+    padding: 10px !important; /* Removes padding */
+  }
+
 }

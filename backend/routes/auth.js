@@ -62,14 +62,16 @@ router.post("/change-password", async (req, res) => {
 });
 
 
-router.post('/signup', (req, res) => {
-  const { username, password, name } = req.body;
+router.post('/register', async (req, res) => {
+  const { email, password, firstName, lastName } = req.body;
 
-  registerUser(username, password, name, (err, user) => {
-    if (err) {
-      console.error(err);
-      res.status(409).json({ success: false, message: err });
-    }
-    else res.json({ success: true, user });
-  });
+
+  try {
+    const user = await registerUser(email, password, firstName, lastName)
+    res.json({ success: true, user });
+  } catch (err) {
+    console.error(err);
+    res.status(409).json({ success: false, message: err });
+    return res.status(500).json({ success: false, message: err });
+  }
 });

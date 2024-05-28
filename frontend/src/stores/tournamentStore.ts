@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import axios from "@/plugins/axios";
 import { Tournament } from "@/model/Tournament";
 
+let instance: any;
+
 export const useTournamentStore = () => {
   const tournamentStore = defineStore({
     id: "tournament",
@@ -13,7 +15,6 @@ export const useTournamentStore = () => {
 
     actions: {
       async fetchTournaments() {
-        console.debug("fetching tournaments");
         this.loading = true;
         const response = await axios.get("/tournaments");
         this.loading = false;
@@ -21,10 +22,9 @@ export const useTournamentStore = () => {
           (tournament: Tournament) => new Tournament(tournament)
         );
       },
-      async fetchTournamentById(id: number): Promise<Tournament> {
+    async fetchTournamentById(id: number): Promise<Tournament> {
         // Check if the tournament is already in the state
 
-        console.debug(`fetching tournament by id ${id}`);
         const tournament = this.tournaments.find(
           (tournament) => tournament.id === id
         );
@@ -37,6 +37,26 @@ export const useTournamentStore = () => {
           return new Tournament(response.data);
         }
       },
+      async deleteTournament(id: number) {
+        await axios.delete(`/tournaments/${id}`);
+        this._tournaments = this._tournaments.filter(
+          (tournament) => tournament.id !== id
+        );
+      },
+
+      async deleteTournaments(ids: number[]) {
+        await axios.post(`/tournaments/delete`, { ids });
+        this._tournaments = this._tournaments.filter(
+          (tournament) => !ids.includes(tournament.id)
+        );
+      },
+      async updateTournament(tournament: Tournament) {
+        await axios.put(`/tournaments/${tournament.id}`, tournament);
+        const index = this._tournaments.findIndex(
+          (t) => t.id === tournament.id
+        );
+        this._tournaments[index] = tournament;
+      }
     },
     getters: {
       tournaments(state): Tournament[] {
@@ -45,7 +65,7 @@ export const useTournamentStore = () => {
     },
   });
 
-  const instance = tournamentStore();
+  instance = tournamentStore();
   // Initialize the store
   if (!instance._initialized) {
     instance.fetchTournaments();

@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "@types/lodash": "^4.17.0",
     "@types/papaparse": "^5.3.14",
     "axios": "^1.6.2",
+    "lodash": "^4.17.21",
     "papaparse": "^5.4.1",
     "pinia": "^2.1.7",
     "toastify-js": "^1.12.0",

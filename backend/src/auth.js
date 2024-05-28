@@ -101,4 +101,10 @@ function authorize(roles = []) {
   };
 }
 
-module.exports = { init, authorize };
+async function registerUser(email, password, firstName, lastName, role = 'user') {
+  const user = new User({ email, firstName, lastName, role });
+  await user.setPassword(password);
+  return user.save();
+}
+
+module.exports = { init, authorize, registerUser };

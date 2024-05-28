@@ -31,7 +31,7 @@ function makeApp() {
   
   
   auth.init(app);
-  mongoose.init(app);
+  mongoose.init();
   openapi.init(app);
 
   const prefix = "/api/v1"
@@ -45,10 +45,11 @@ function makeApp() {
   app.use(function (err, req, res, next) {
 
     res.status(err.status || 500);
-    if (req.app.get('env') === 'development')
-      res.send(err);
+    console.error(err);
+    if (process.env["ENV"] === 'development')
+      res.send({error: err.message, stack: err.stack});
     else
-      res.send();
+      res.send({status: "error", message: "Internal Server Error"});
   });
 
   return app;

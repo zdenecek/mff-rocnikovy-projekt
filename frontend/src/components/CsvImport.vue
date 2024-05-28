@@ -33,11 +33,11 @@
             </div>
             <v-select class="py-2" hide-details :items="availableHeadersSelect" v-model="selectedHeaders[i]"
               variant="outlined" density="compact">
-            
+
               <template v-slot:append>
-                
-                <v-icon class="px-0" :class="{ 'hidden' : !extraColumns?.includes(selectedHeaders[i].title) }" color="error"
-                title="Duplicitní sloupec" >mdi-alert-circle</v-icon>
+
+                <v-icon class="px-0" :class="{ 'hidden': !extraColumns?.includes(selectedHeaders[i].title) }"
+                  color="error" title="Duplicitní sloupec">mdi-alert-circle</v-icon>
               </template>
             </v-select>
           </th>
@@ -50,13 +50,13 @@
             <template v-slot:prepend>
               <v-icon color="error">mdi-alert-circle</v-icon>
             </template>
-            Chybějící sloupce: {{ missingColumns?.join(',') }}
+            Chybějící sloupce: {{ missingColumns?.join(', ') }}
           </v-list-item>
           <v-list-item v-show="extraColumns.length > 0">
             <template v-slot:prepend>
               <v-icon color="error">mdi-alert-circle</v-icon>
             </template>
-            Duplicitní sloupce: {{ extraColumns?.join(',') }}
+            Duplicitní sloupce: {{ extraColumns?.join(', ') }}
           </v-list-item>
           <v-list-item v-show="errorCellCount">
             <template v-slot:prepend>
@@ -65,7 +65,9 @@
 
             <div class="flex align-center spaced">
               Chyby v datech (celkem {{ errorRowCount }} záznamů, {{ errorCellCount }} buňek)
-              <v-checkbox v-model="showErrorRecordsOnly" hide-details label="Zobrazit pouze chybové záznamy" density="compact"> </v-checkbox>
+              <v-checkbox v-model="showErrorRecordsOnly" hide-details label="Zobrazit pouze chybové záznamy"
+                density="compact">
+              </v-checkbox>
             </div>
           </v-list-item>
         </v-list>
@@ -73,22 +75,25 @@
     </div>
   </div>
 </template>
-   
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import Papa from 'papaparse';
 import { watch } from 'vue';
 import { computed } from 'vue';
 
+type Validator = (value: string | undefined) => boolean | string | undefined;
+
 interface AvaliableHeader {
   title: string;
   value: string;
   matchNames?: string[];
-  multiple?: boolean;
   ignore?: boolean;
   required?: boolean;
-  validate?: (value: string) => boolean | string | undefined;
-  transform?: (value: string) => any;
+  // validate every single value
+  validate?: Validator | Validator[];
+  multiple?: boolean;
+  transform?: ((value: string) => any) | ((value: string[]) => any);
 }
 
 const props = defineProps({
@@ -109,14 +114,14 @@ watch(selectedHeaders, () => {
 }, { deep: true });
 
 const file = ref(undefined as File[] | undefined);
-watch(file, fileChanged);
+watch(file, () => fileChanged(true));
 
-function fileChanged() {
-  if (file.value && file.value.length > 0) handleFileUpload(file.value[0])
+function fileChanged(guessHeaders?: boolean ) {
+  if (file.value && file.value.length > 0) handleFileUpload(file.value[0], guessHeaders)
   else {
     headers.value = [];
     csvData.value = [];
-    
+
     resetValidation();
   }
 }
@@ -124,42 +129,62 @@ function fileChanged() {
 const headers = ref([] as any[]);
 const csvData = ref([] as any[]);
 const fileHasHeaders = ref(true);
-watch(fileHasHeaders, fileChanged);
+watch(fileHasHeaders, () => fileChanged());
 
-function handleFileUpload(file: File) {
+function handleFileUpload(file: File, guessHeaders?: boolean ) {
+  if (guessHeaders) fileHasHeaders.value = false;
   Papa.parse(file, {
+
     header: fileHasHeaders.value,
+    skipEmptyLines: true,
     complete: (results: any) => {
       headers.value = Object.keys(results.data[0]).map((key, index) => ({ title: fileHasHeaders.value ? key : `Sloupec ${index + 1}`, value: key }));
       selectedHeaders.value = headers.value.map(({ title }) => {
-        const normalized = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "");
+        const normalized = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(" ", "");
         const match = props.availableHeaders.find(h => h.matchNames?.includes(normalized));
-        if (match) return match;
+        if (match) {
+          if (guessHeaders) fileHasHeaders.value = true;
+          return match;
+        }
         else return ignoreColumn;
       });
       csvData.value = results.data;
       updateHandler();
     }
   });
+
 };
 
 function updateHandler() {
   const valid = validate();
-  if(valid) emits('dataUpdated', transformData(csvData.value, selectedHeaders.value, headers.value))
+  if (valid) emits('dataUpdated', transformData(csvData.value, selectedHeaders.value, headers.value, fileHasHeaders.value))
   else emits('dataUpdated', null)
 }
 
-function transformData(data: any[], outHeaders: AvaliableHeader[], inHeaders: { title: string }[]) {
+function transformData(data: any[], outHeaders: AvaliableHeader[], inHeaders: { title: string }[], useTitle: boolean) {
+
+  const headers = outHeaders.reduce((acc, header) => {
+    if (header.value in acc) acc[header.value]++;
+    else if (header.multiple) acc[header.value] = 1;
+    return acc;
+  }, {} as Record<string, number>);
+
   return data.map(item => {
+
+    const headerCounts = { ...headers };
     const newItem = {} as any;
-    outHeaders.filter(h => !h.ignore).forEach((header, index) => {
+    outHeaders.forEach((header, index) => {
+      if (header.ignore) return;
       const inHeader = inHeaders[index];
-      let value = item[inHeader.title];
-      if (header.transform) value = header.transform(value);
+      let value = item[useTitle ? inHeader.title : index];
+
       if (header.multiple) {
         if (!newItem[header.value]) newItem[header.value] = [];
         newItem[header.value].push(value);
+        headerCounts[header.value]--;
+        if (headerCounts[header.value] === 0 && header.transform) newItem[header.value] = header.transform(newItem[header.value])
       } else {
+        if (header.transform) value = header.transform(value);
         newItem[header.value] = value;
       }
     })
@@ -170,8 +195,8 @@ function transformData(data: any[], outHeaders: AvaliableHeader[], inHeaders: { 
 
 const errorCellCount = ref(0);
 const errorRowCount = ref(0);
-const missingColumns = ref([] as string[] );
-const extraColumns = ref([] as string[] );
+const missingColumns = ref([] as string[]);
+const extraColumns = ref([] as string[]);
 
 const hasErrors = computed(() => errorCellCount.value > 0 || missingColumns.value.length > 0 || extraColumns.value.length > 0);
 
@@ -185,13 +210,27 @@ function validate() {
     item.errors = {};
     item.hasErrors = false;
 
+
+
     selectedHeaders.value.forEach((selectedHeader, index) => {
 
       if (!selectedHeader.validate) return;
 
 
       const inHeader = headers.value[index];
-      const result = selectedHeader.validate(item[inHeader.value]);
+
+      let validate = []
+
+      if (!(Symbol.iterator in selectedHeader.validate))
+        validate = [selectedHeader.validate]
+      else
+        validate = selectedHeader.validate
+
+      let result = true as boolean | string | undefined;
+      validate.forEach(v => {
+        const value = item[inHeader.value];
+        result &&= v(value);
+      })
       const failed = result === false || typeof result === 'string';
 
       if (!failed) return;
@@ -204,13 +243,13 @@ function validate() {
 
   errorCellCount.value = _errorCellCount;
   errorRowCount.value = _errorRowCount;
-  if(!_errorRowCount) showErrorRecordsOnly.value = false;
+  if (!_errorRowCount) showErrorRecordsOnly.value = false;
 
-   missingColumns.value = props.availableHeaders.filter(h => h.required && !selectedHeaders.value.includes(h)).map(
+  missingColumns.value = props.availableHeaders.filter(h => h.required && !selectedHeaders.value.includes(h)).map(
     h => h.title
   );
 
-  extraColumns.value = Array.from( new Set(selectedHeaders.value.filter(h => !h.ignore && !h.multiple && selectedHeaders.value.filter(h2 => h2 === h).length > 1).map(
+  extraColumns.value = Array.from(new Set(selectedHeaders.value.filter(h => !h.ignore && !h.multiple && selectedHeaders.value.filter(h2 => h2 === h).length > 1).map(
     h => h.title
   )));
 

@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth', {
         },
         async register(email: string, password: string, firstName: string, lastName: string) {
              try {
-                const response = await axios.post('/auth/register', { email: email, password, firstName, lastName});
+                const response = await axios.post('/register', { email: email, password, firstName, lastName});
                 console.debug('Register successful:', response.data.user);
             } catch (error: any) {
                 console.error('Register error:', error.message);

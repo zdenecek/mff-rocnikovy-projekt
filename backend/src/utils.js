@@ -4,4 +4,13 @@ function choose(choices) {
     return choices[index];
 }
 
-module.exports = { choose };
+function only(source, keys) {
+    return Object.keys(source)
+        .filter(key => keys.includes(key))
+        .reduce((obj, key) => {
+            obj[key] = source[key];
+            return obj;
+        }, {});
+}
+
+module.exports = { choose, only};

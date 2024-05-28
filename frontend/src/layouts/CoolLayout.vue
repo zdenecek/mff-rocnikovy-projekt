@@ -69,7 +69,7 @@
             </v-row>
             <v-row class="footer">
                 <v-col class="flex align-center flex-col">
-                    <router-link class="link" :to="{ name: 'home' }">
+                    <router-link class="link" :to="{ name: 'privacy-policy' }">
                         Ochrana osobních údajů
                     </router-link>
                     <a href="mailto:zdnek.tomis@gmail.com">

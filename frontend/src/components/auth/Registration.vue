@@ -65,6 +65,19 @@ const emailRules = [
 const passwordRules = [
   (v: string) => !!v || 'Vyplňte heslo',
 ];
+const passwordAgainRules = [
+  (v: string) => !!v || 'Vyplňte',
+  (v: string) => v === password.value || 'Hesla se neshodují',
+];
+const firstNameRules = [
+  (v: string) => !!v || 'Vyplňte jméno',
+];
+const lastNameRules = [
+  (v: string) => !!v || 'Vyplňte příjmení',
+];
+const agreementRules = [
+  (v: boolean) => !!v || 'Musíte souhlasit s podmínkami',
+];
 
 const errorMessages = ref({} as any);
 

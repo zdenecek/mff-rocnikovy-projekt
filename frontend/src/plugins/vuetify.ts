@@ -54,5 +54,11 @@ export default createVuetify({
       border: "solid 1px #163558",
       density: "comfortable",
     },
+    VSelect: {
+      variant: "outlined",
+    },
+    VTextarea: {
+      variant: "outlined",
+    }
   },
 });

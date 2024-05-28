@@ -9,7 +9,7 @@ const options = {
       version: '0.1.0',
     },
   },
-  apis: ['./src/routes/*.yaml', './openapi.yaml'], 
+  apis: ['./routes/*.yaml', './openapi.yaml'], 
 };
 
 
@@ -18,4 +18,4 @@ function init(app) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 }
 
-module.exports = { init };
+module.exports = { init }; 

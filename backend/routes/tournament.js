@@ -4,6 +4,20 @@ const { Tournament, Result, Player } = require('../models');
 const { authorize } = require('../src/auth');
 const { check, validationResult } = require('express-validator');
 const Sequelize = require('sequelize');
+const { only } = require('../src/utils');
+
+const uniquePlayerIds = (value, { req }) => {
+  const ids = [];
+  value.forEach(result => {
+      result.players.forEach(player => {
+          if (ids.includes(player.id)) {
+              throw new Error('Player id must be unique');
+          }
+          ids.push(player.id);
+      });
+  });
+  return true;
+};
 
 
 const resultValidators = [
@@ -18,6 +32,7 @@ const resultValidators = [
     }
     return true;
   }),
+  check('results').custom(uniquePlayerIds),
 ]
 
 // Get all tournaments
@@ -60,6 +75,28 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+async function updateTournamentResults(tournament, results) {
+  for (const resultData of results) {
+    const { players, ...resultInfo } = resultData;
+    const result = await Result.create(resultInfo);
+
+    for (const playerData of players) {
+      let player;
+      if (playerData.type === 'create') {
+        player = await Player.create(playerData);
+      } else {
+        player = await Player.findByPk(playerData.id);
+      }
+
+      if (player) {
+        await result.addPlayer(player);
+      }
+    }
+
+    await tournament.addResult(result);
+  }
+}
+
 // Create one tournament
 router.post('/', authorize("admin"),
   [
@@ -69,7 +106,7 @@ router.post('/', authorize("admin"),
     check('place').optional(),
     check('description').optional(),
     check('results').optional().isArray().withMessage('not-valid-array'),
-    check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url')
+    check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url'),
   ], resultValidators
   , async (req, res) => {
 
@@ -81,43 +118,20 @@ router.post('/', authorize("admin"),
     const { results, ...tournamentData } = req.body;
     const tournament = await Tournament.create(tournamentData, { include: ['results'] });
 
-    if (results) {
-      for (const resultData of results) {
-        const { players, ...resultInfo } = resultData;
-        const result = await Result.create(resultInfo);
-
-        for (const playerData of players) {
-          let player;
-          if (playerData.type === 'create') {
-            player = await Player.create(playerData);
-          } else {
-            player = await Player.findByPk(playerData.id);
-          }
-
-          if (player) {
-            const unit = await Unit.create({ name: player.lastName });
-            await unit.setPlayer(player);
-            await result.setUnit(unit);
-          }
-        }
-
-        await tournament.addResult(result);
-      }
-    }
+    if (results) await updateTournamentResults(tournament, results);
 
 
     res.status(201).json(tournament);
   });
 
 // Update one tournament
-router.patch('/:id', authorize("admin"), [
+router.put('/:id', authorize("admin"), [
   check('title').optional().notEmpty().withMessage('required'),
   check('startDate').optional().isDate().withMessage('not-valid-date'),
   check('endDate').optional().isDate().withMessage('not-valid-date'),
   check('place').optional(),
   check('description').optional(),
   check('externalDocumentationLink').optional().isURL().withMessage('not-valid-url'),
-
 ], resultValidators, async (req, res) => {
 
   const errors = validationResult(req);
@@ -127,7 +141,11 @@ router.patch('/:id', authorize("admin"), [
 
   const tournament = await Tournament.findByPk(req.params.id);
   if (tournament) {
-    await tournament.update(req.body);
+    await tournament.update(only(req.body, [
+      'title', 'startDate', 'endDate', 'place', 'description', 'externalDocumentationLink'
+    ]));
+    const { results } = req.body;
+    if (results) await updateTournamentResults(tournament, results);
     res.json(tournament);
   } else {
     res.status(404).json({ message: 'Cannot find tournament' });
@@ -144,5 +162,16 @@ router.delete('/:id', authorize("admin"), async (req, res) => {
     res.status(404).json({ message: 'Cannot find tournament' });
   }
 });
+
+
+router.post('/delete', authorize("admin"), [
+  check('ids').isArray().withMessage('not-an-array'),
+  check('ids.*').isNumeric().withMessage('not-a-number')
+], async (req, res) => {
+ const result =  await Tournament.destroy({ where: { id: req.body.ids } });
+  res.json({ success: true, result });
+});
+
+
 
 module.exports = router;

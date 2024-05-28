@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -28,8 +29,12 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
     });
+    await queryInterface.sequelize.query(`
+    ALTER TABLE Players
+    ADD COLUMN fullName VARCHAR(255) AS (CONCAT(firstName, ' ', lastName))
+  `);
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Players');

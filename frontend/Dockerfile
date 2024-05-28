@@ -3,5 +3,5 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 8081
-CMD ["npm", "run", "dev", "--" ,"--port", "8081", "--host"]
+EXPOSE 8080
+CMD ["npm", "run", "dev", "--" ,"--port", "8080", "--host"]

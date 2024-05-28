@@ -3,9 +3,13 @@ import { Player } from "./Player";
 
 export class Result {
   rank: number;
-  scoreAchieved: number;
+  scoreAchieved?: number;
   players: Player[];
   title?: string;
+
+  static empty() {
+    return new Result({ rank: 1, players: [], title: "" });
+  }
 
   constructor(data: Result) {
     this.rank = data.rank;
@@ -16,6 +20,16 @@ export class Result {
 }
 
 export type TournamentType = "team" | "individual" | "pair";
+
+export const TournamentTypes = [
+  { title: "Individuál", value: "individual" },
+  { title: "Párový turnaj", value: "pair" },
+  { title: "Týmový turnaj", value: "team" },
+];
+
+export function getTournamentTypeTitle(type: TournamentType) {
+  return TournamentTypes.find((t) => t.value === type)?.title || "";
+}
 
 export class Tournament {
   id: number;
@@ -29,6 +43,15 @@ export class Tournament {
   resultsCount?: number;
 
   results?: Result[];
+
+  static empty() {
+    return new Tournament({
+      id: 0,
+      title: "",
+      type: "pair",
+      results: [] as Result[],
+    } as Tournament);
+  }
 
   constructor(data: Tournament) {
     this.id = data.id;
@@ -60,5 +83,18 @@ export class Tournament {
 
   get slug(): string {
     return makeSlug(this.title);
+  }
+
+  toJSON(): any {
+    const data = {
+      ...this,
+      startDate: undefined as string | undefined,
+      endDate: undefined as string | undefined,
+    };
+    // @ts-ignore
+    data.startDate = this.startDate?.toISOString().split("T")[0];
+    // @ts-ignore
+    data.endDate = this.endDate?.toISOString().split("T")[0];
+    return data;
   }
 }
