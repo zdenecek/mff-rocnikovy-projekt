@@ -42,8 +42,8 @@ jobs:
             chmod +x wait-for-it.sh
       - name: Wait for MongoDB
         run: ./wait-for-it.sh localhost:27018 --timeout=60 --strict -- echo "MongoDB is up"
-      - name: Wait for PostgreSQL
-        run: ./wait-for-it.sh localhost:5432 --timeout=60 --strict -- echo "PostgreSQL is up"
+      - name: Wait for MySQL
+        run: ./wait-for-it.sh localhost:3306 --timeout=60 --strict -- echo "Mysql is up"
       - name: Run tests
         working-directory: ./backend
         env:
