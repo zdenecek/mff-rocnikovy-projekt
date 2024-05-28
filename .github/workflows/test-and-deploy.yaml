@@ -51,6 +51,7 @@ jobs:
           DB_URL: mysql://root:root@localhost:3306/testdb
         run: npm test
   deploy:
+
     needs: test_backend
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/release/')
@@ -59,6 +60,18 @@ jobs:
       frontend_env_secret: 'FRONTEND_ENV'
       backend_env_secret: 'BACKEND_ENV'
     steps:
+      - name: Get Secrets
+        uses: bitwarden/sm-action@v2
+        with:
+          access_token: ${{ secrets.BW_ACCESS_TOKEN }}
+          base_url: https://vault.bitwarden.com
+          secrets: |
+            48256f1a-e560-48a7-b838-b17e017d4689 > BACKEND_ENV
+            df315311-36c4-4307-a697-b17e017d84f4 > FRONTEND_ENV
+            7ccc4571-de33-437a-9216-b17e0178081e > VPS_HOST
+            b9a82ebc-6cd0-4b16-9669-b17e01781aae > VPS_PASSWORD
+            4668236a-4ec6-43dd-acce-b17e01783442 > VPS_SSH_PORT
+            86141b0a-dd09-4b0d-a573-b17e01785834 > VPS_USERNAME
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Set up Node.js
@@ -77,12 +90,12 @@ jobs:
         working-directory: ./frontend
         run: |
           echo "VITE_APP_VERSION=${{ steps.package-version.outputs.current-version }} (on ${{ github.ref_name }})"  >.env
-          echo "${{ secrets[env.frontend_env_secret] }}" | sed 's/\\n/\n/g' >>.env
+          echo "${{ env[env.frontend_env_secret] }}" | sed 's/\\n/\n/g' >>.env
           
           echo "VITE_BUILD_TIME=$(date)"  >>.env
           - name: Add environment information to backend
             working-directory: ./api
-            run: echo "${{  secrets[env.backend_env_secret] }}" | sed 's/\\n/\n/g' >.env
+            run: echo "${{  env[env.backend_env_secret] }}" | sed 's/\\n/\n/g' >.env
           - name: Build frontend
             working-directory: ./frontend
             run: |
@@ -91,21 +104,21 @@ jobs:
           - name: Transfer to VPS
             uses: appleboy/scp-action@master
             with:
-              host: ${{ secrets.VPS_HOST }}
-              username: ${{ secrets.VPS_USERNAME }}
-              password: ${{ secrets.VPS_PASSWORD }}
-              port: ${{ secrets.VPS_SSH_PORT }}
+              host: ${{ env.VPS_HOST }}
+              username: ${{ env.VPS_USERNAME }}
+              password: ${{ env.VPS_PASSWORD }}
+              port: ${{ env.VPS_SSH_PORT }}
               source: "frontend/dist, api/*, scraper/"
-              target: "/home/${{ secrets.VPS_USERNAME }}/${{ env.deployment_name }}/"
+              target: "/home/${{ env.VPS_USERNAME }}/${{ env.deployment_name }}/"
           - name: Restart server
             uses: appleboy/ssh-action@master
             with:
-              host: ${{ secrets.VPS_HOST }}
-              username: ${{ secrets.VPS_USERNAME }}
-              password: ${{ secrets.VPS_PASSWORD }}
-              port: ${{ secrets.VPS_SSH_PORT }}
+              host: ${{ env.VPS_HOST }}
+              username: ${{ env.VPS_USERNAME }}
+              password: ${{ env.VPS_PASSWORD }}
+              port: ${{ env.VPS_SSH_PORT }}
               script: |
-                DIR="/home/${{ secrets.VPS_USERNAME }}/${{ env.deployment_name }}"
+                DIR="/home/${{ env.VPS_USERNAME }}/${{ env.deployment_name }}"
                 cd $DIR
                 mv frontend/dist frontend1
                 rm -rf frontend
