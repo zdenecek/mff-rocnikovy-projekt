@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
     },
     group: ['Tournament.id']
   });
-  res.json(tournaments);
+  return res.json(tournaments).send();
 });
 
 // Get one tournament
@@ -165,13 +165,12 @@ router.delete('/:id', authorize("admin"), async (req, res) => {
 
 
 router.post('/delete', authorize("admin"), [
-  check('ids').isArray().withMessage('not-an-array'),
+  check('ids').isArray().withMessage('no>t-an-array'),
   check('ids.*').isNumeric().withMessage('not-a-number')
 ], async (req, res) => {
  const result =  await Tournament.destroy({ where: { id: req.body.ids } });
   res.json({ success: true, result });
 });
-
 
 
 module.exports = router;

@@ -1,4 +1,4 @@
-# Developing guide
+# Development guide
 
 ## Architecture
 
@@ -57,6 +57,8 @@ Any push to a branch with a name starting with `release` will be deployed to the
 ## Deploying
 
 Deployment can be done using docker or by hand.
+
+An automated deployment process is part of the [CI / CD pipeline](#ci--cd).
 
 Additional files are provided to aid with deployment in the `deployment` directory.
 

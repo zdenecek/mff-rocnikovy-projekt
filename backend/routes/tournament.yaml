@@ -49,7 +49,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tournament'
-    patch:
+    put:
       summary: Update a specific tournament by ID
       tags: ["Tournaments"]
       requestBody:
@@ -92,3 +92,28 @@ components:
           type: array
           items:
             type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result'
+    Result:
+      type: object
+      properties:
+        place:
+          type: integer
+        unitName:
+          type: string
+          required: false
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+    Player:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        id: 
+          type: number

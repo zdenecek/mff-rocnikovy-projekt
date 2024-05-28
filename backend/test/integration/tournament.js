@@ -6,25 +6,26 @@ const makeApp = require('../makeApp');
 const app = makeApp();
 const adminUser = {
   id: 12,
-  username: 'admin',
+  username: 'admin1',
   role: 'admin',
 };
 
 const regularUser = {
-  id: 12,
+  id: 13,
   username: 'user',
   role: 'user',
 };
 
 describe('Tournament API', () => {
+  const basePath = '/api/v1';
 
   describe('GET /tournaments', () => {
     it('should GET all tournaments', async () => {
       const res = await request(app)
-        .get('/tournaments')
+        .get(`${basePath}/tournaments`)
         .expect('Content-Type', /json/)
         .expect(200);
-      // Add more assertions as needed
+
     });
   });
 
@@ -35,7 +36,7 @@ describe('Tournament API', () => {
       });
 
       const res = await request(app)
-        .get(`/tournaments/${tournament.id}`)
+        .get(`${basePath}/tournaments/${tournament.id}`)
         .expect('Content-Type', /json/)
         .expect(200)
         .expect((res) => { res.body.id = tournament.id, res.body.title = tournament.title });
@@ -43,7 +44,7 @@ describe('Tournament API', () => {
 
     it('should return 404 if tournament does not exist', async () => {
       const res = await request(app)
-        .get('/tournaments/9999')
+        .get(`${basePath}/tournaments/9999`)
         .expect('Content-Type', /json/)
         .expect(404)
         .expect((res) => { res.body.success = false, res.body.code = 'tournament-not-found' });
@@ -57,7 +58,7 @@ describe('Tournament API', () => {
 
       it('should POST a new tournament', async () => {
         const res = await request(app)
-          .post('/tournaments')
+          .post(`${basePath}/tournaments`)
           .send({
             title: 'Test Tournament',
             startDate: '2021-01-01',
@@ -68,7 +69,7 @@ describe('Tournament API', () => {
 
       it('should return 400 for missing title', async () => {
         const res = await request(app)
-          .post('/tournaments')
+          .post(`${basePath}/tournaments`)
           .send({
             startDate: '2021-01-01',
           })
@@ -79,7 +80,7 @@ describe('Tournament API', () => {
 
       it('should return 400 for missing start date', async () => {
         const res = await request(app)
-          .post('/tournaments')
+          .post(`${basePath}/tournaments`)
           .send({
             title: 'Hello world',
           })
@@ -90,15 +91,15 @@ describe('Tournament API', () => {
     });
   });
 
-  describe("PATCH /tournaments/:id", () => {
+  describe("PUT /tournaments/:id", () => {
     context("with admin user", () => {
       beforeEach(() => app.setUserOnce(adminUser));
-      it('should PATCH an existing tournament', async () => {
+      it('should PUT an existing tournament', async () => {
         const tournament = await Tournament.create({
         });
 
         const res = await request(app)
-          .patch(`/tournaments/${tournament.id}`)
+          .put(`${basePath}/tournaments/${tournament.id}`)
           .send({
           })
           .expect('Content-Type', /json/)
@@ -107,7 +108,7 @@ describe('Tournament API', () => {
 
       it('should return 404 if tournament does not exist', async () => {
         const res = await request(app)
-          .patch('/tournaments/9999')
+          .put(`${basePath}/tournaments/9999`)
           .send({
           })
           .expect('Content-Type', /json/)
@@ -124,7 +125,7 @@ describe('Tournament API', () => {
         });
 
         const res = await request(app)
-          .patch(`/tournaments/${tournament.id}`)
+          .put(`${basePath}/tournaments/${tournament.id}`)
           .send({
           })
           .expect('Content-Type', /json/)
@@ -139,7 +140,7 @@ describe('Tournament API', () => {
         });
 
         const res = await request(app)
-          .patch(`/tournaments/${tournament.id}`)
+          .put(`${basePath}/tournaments/${tournament.id}`)
           .send({
           })
           .expect('Content-Type', /json/)

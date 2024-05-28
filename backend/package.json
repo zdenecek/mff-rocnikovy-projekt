@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "npx sequelize-cli db:migrate --env test; mocha --exit --recursive",
+    "test": "npx sequelize-cli db:migrate --env test; mocha --exit --recursive --trace --timeout 2000",
     "db-clean": "npx sequelize db:migrate:undo:all",
     "migrate": "npx sequelize db:migrate",
     "seed": "npx sequelize db:seed:all --debug"
@@ -32,10 +32,12 @@
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
     "chai": "^4.3.10",
+    "leaked-handles": "^5.2.0",
     "mocha": "^10.2.0",
     "nodemon": "^3.1.0",
     "sequelize-cli": "^6.6.2",
     "sinon": "^17.0.1",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "wtfnode": "^0.9.2"
   }
 }

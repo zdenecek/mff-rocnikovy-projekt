@@ -17,11 +17,12 @@ const regularUser = {
 };
 
 describe('Player API', () => {
+  const basePath = '/api/v1';
 
   describe('GET /players', () => {
     it('should GET all players', async () => {
       const res = await request(app)
-        .get('/players')
+        .get(`${basePath}/players`)
         .expect('Content-Type', /json/)
         .expect(200);
       // Add more assertions as needed
@@ -38,7 +39,7 @@ describe('Player API', () => {
       });
 
       const res = await request(app)
-        .get(`/players/${player.id}`)
+        .get(`${basePath}/players/id/${player.id}`)
         .expect('Content-Type', /json/)
         .expect(200)
         .expect((res) => { res.body.id = player.id, res.body.firstName = player.firstName });
@@ -46,7 +47,7 @@ describe('Player API', () => {
 
     it('should return 404 if player does not exist', async () => {
       const res = await request(app)
-        .get('/players/9999')
+        .get(`${basePath}/players/id/9999`)
         .expect('Content-Type', /json/)
         .expect(404)
         .expect((res) => { res.body.success = false, res.body.code = 'player-not-found' });
@@ -59,7 +60,7 @@ describe('Player API', () => {
 
       it('should POST a new player', async () => {
         const res = await request(app)
-          .post('/players')
+          .post(`${basePath}/players`)
           .send({
             firstName: 'Test',
             lastName: 'Player',
@@ -70,9 +71,9 @@ describe('Player API', () => {
           .expect(201);
       });
 
-      it('should return 400 for missing ;ast name', async () => {
+      it('should return 400 for missing last name', async () => {
         const res = await request(app)
-          .post('/players')
+          .post(`${basePath}/players`)
           .send({
             firstName: 'Player',
             birthdate: '2000-01-01',
@@ -100,7 +101,7 @@ describe('Player API', () => {
         });
 
         const res = await request(app)
-          .patch(`/players/${player.id}`)
+          .patch(`${basePath}/players/${player.id}`)
           .send({
             firstName: 'Updated',
             lastName: 'Player',
@@ -113,7 +114,7 @@ describe('Player API', () => {
 
       it('should return 404 if player does not exist', async () => {
         const res = await request(app)
-          .patch('/players/9999')
+          .patch(`${basePath}/players/9999`)
           .send({
             firstName: 'Updated',
             lastName: 'Player',
@@ -127,7 +128,7 @@ describe('Player API', () => {
     });
   });
 
-  describe("DELETE /players/:id", () => {
+  describe("DELETE /players/id/:id", () => {
     context("with admin user", () => {
       beforeEach(() => app.setUserOnce(adminUser));
 
@@ -140,7 +141,7 @@ describe('Player API', () => {
         });
 
         const res = await request(app)
-          .delete(`/players/${player.id}`)
+          .delete(`${basePath}/players/${player.id}`)
           .expect(200);
       });
 
