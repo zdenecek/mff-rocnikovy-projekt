@@ -19,14 +19,13 @@ jobs:
         image: mongo:latest
         ports:
           - 27018:27017
-      postgres:
-        image: postgres:latest
+      mysql:
+        image: mysql:latest
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testdb
         ports:
-          - 5432:5432
+          - 3306:3306
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -49,12 +48,16 @@ jobs:
         working-directory: ./backend
         env:
           MONGO_URL: mongodb://localhost:27018/testdb
-          DB_URL: postgres://postgres:postgres@localhost:5432/testdb
+          DB_URL: mysql://root:root@localhost:3306/testdb
         run: npm test
   deploy:
     needs: test_backend
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/release/')
+    env:
+      deployment_name: 'dev'
+      frontend_env_secret: 'FRONTEND_ENV'
+      backend_env_secret: 'BACKEND_ENV'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -73,38 +76,50 @@ jobs:
       - name: Add environment information to frontend
         working-directory: ./frontend
         run: |
-          echo "VITE_API_URL=${{ secrets.VITE_BASE_URL }}" >.env
-          echo "VITE_APP_VERSION=${{ steps.package-version.outputs.current-version }} (on ${{ github.ref_name }})"  >>.env
+          echo "VITE_APP_VERSION=${{ steps.package-version.outputs.current-version }} (on ${{ github.ref_name }})"  >.env
+          echo "${{ secrets[env.frontend_env_secret] }}" | sed 's/\\n/\n/g' >>.env
+          
           echo "VITE_BUILD_TIME=$(date)"  >>.env
-      - name: Add environment information to backend
-        working-directory: ./backend
-        run: echo "${{ secrets.BACKEND_ENV }}" >.env
-      - name: Build frontend
-        working-directory: ./frontend
-        run: |
-          npm install
-          npm run build --production
-      - name: Transfer to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: ${{ secrets.VPS_SSH_PORT }}
-          source: "frontend/dist, api/*"
-          target: "/home/mbs/matrika/"
-      - name: Restart server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: ${{ secrets.VPS_SSH_PORT }}
-          script: |
-            cd /home/mbs/matrika
-            mv frontend/dist frontend1
-            rm -rf frontend
-            mv frontend1 frontend
-            cd /home/mbs/rr/api
-            npm install --production
-            pm2 restart matrika-api
+          - name: Add environment information to backend
+            working-directory: ./api
+            run: echo "${{  secrets[env.backend_env_secret] }}" | sed 's/\\n/\n/g' >.env
+          - name: Build frontend
+            working-directory: ./frontend
+            run: |
+              npm install
+              npm run build --production
+          - name: Transfer to VPS
+            uses: appleboy/scp-action@master
+            with:
+              host: ${{ secrets.VPS_HOST }}
+              username: ${{ secrets.VPS_USERNAME }}
+              password: ${{ secrets.VPS_PASSWORD }}
+              port: ${{ secrets.VPS_SSH_PORT }}
+              source: "frontend/dist, api/*, scraper/"
+              target: "/home/${{ secrets.VPS_USERNAME }}/${{ env.deployment_name }}/"
+          - name: Restart server
+            uses: appleboy/ssh-action@master
+            with:
+              host: ${{ secrets.VPS_HOST }}
+              username: ${{ secrets.VPS_USERNAME }}
+              password: ${{ secrets.VPS_PASSWORD }}
+              port: ${{ secrets.VPS_SSH_PORT }}
+              script: |
+                DIR="/home/${{ secrets.VPS_USERNAME }}/${{ env.deployment_name }}"
+                cd $DIR
+                mv frontend/dist frontend1
+                rm -rf frontend
+                mv frontend1 frontend
+                cd $DIR/api
+                npm install --production
+                # Check if the pm2 process exists and either restart it or start a new one
+                if pm2 show ${{ env.deployment_name }} > /dev/null; then
+                    echo "Restarting existing PM2 process"
+                    pm2 restart ${{ env.deployment_name }}
+                else
+                    echo "Starting new PM2 process"
+                    pm2 start index.js --name ${{ env.deployment_name }} --log /var/log/rr/${{ env.deployment_name }}/api-pm2.log
+                    pm2 save
+                fi
+
+
