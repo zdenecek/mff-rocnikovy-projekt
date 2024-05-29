@@ -54,6 +54,7 @@ docker compose up -d
 
 > [!NOTE]  
 > The docker compose local deployment is meant for development and testing purposes, it can be somewhat slow and is not optimized for production use.
+> The frontend server runs using the vite development server, which in combination with docker can be slow.
 
 
 The application will be available at [`http://localhost:8080`](http://localhost:8080). Api docs are available at [`http://localhost:3003/api/v1/api-docs`](http://localhost:3003/api/v1/api-docs).
