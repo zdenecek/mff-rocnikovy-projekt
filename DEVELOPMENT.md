@@ -53,6 +53,12 @@ A simpler way to run the tests is use the provided docker-compose file.
 
 There is a container `test` which runs the tests.
 
+## API documentation
+
+API documentation is provided using Swagger.
+
+The documentation is available at `/api-docs` path of the api address.
+
 ## CI / CD
 
 The project is set up with Github Actions for CI / CD.
