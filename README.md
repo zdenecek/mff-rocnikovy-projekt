@@ -52,7 +52,7 @@ To run the project locally, use docker compose.
 docker compose up -d
 ```
 
-> [!NOTE]  
+> [!WARNING]  
 > The docker compose local deployment is meant for development and testing purposes, it can be somewhat slow and is not optimized for production use.
 > The frontend server runs using the vite development server, which in combination with docker can be slow.
 
@@ -68,6 +68,10 @@ To deploy the project without docker, follow these steps:
 3. Setup a server  
    point /api to the backend and all else to the frontend build. Redirect non-existing paths to the frontend index.  
    Example configuration is provided in the [nginx.conf](deployment/nginx.conf) file.
+
+### Default user and dummy data
+
+A default user with the credetials `admin` / `admin` is created on in the docker compose setup, along with dummy data.
 
 ## Developer documentation
 
