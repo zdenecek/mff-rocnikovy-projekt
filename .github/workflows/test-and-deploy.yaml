@@ -88,7 +88,6 @@ jobs:
         run: |
           echo "VITE_APP_VERSION=${{ steps.package-version.outputs.current-version }} (on ${{ github.ref_name }})"  >.env
           echo "${{ env[env.frontend_env_secret] }}" | sed 's/\\n/\n/g' >>.env
-          
           echo "VITE_BUILD_TIME=$(date)"  >>.env
       - name: Add environment information to backend
         working-directory: ./backend
@@ -96,7 +95,7 @@ jobs:
       - name: Build frontend
         working-directory: ./frontend
         run: |
-          npm install
+          npm ci
           npm run build --production
       - name: Transfer to VPS
         uses: appleboy/scp-action@master
@@ -121,7 +120,7 @@ jobs:
             rm -rf frontend
             mv frontend1 frontend
             cd $DIR/backend
-            npm install --production
+            npm ci --production
             # Check if the pm2 process exists and either restart it or start a new one
             if pm2 show ${{ env.deployment_name }} > /dev/null; then
                 echo "Restarting existing PM2 process"

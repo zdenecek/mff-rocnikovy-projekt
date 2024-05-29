@@ -44,9 +44,31 @@ The project is divided into two parts, the backend and the frontend.
 
 The expectation is that the backend will be augmented by workers to perform tasks, including working with external databases, eg. through scraping even.
 
+## Installation
+
+To run the project locally, use docker compose.
+
+```
+docker compose up -d
+```
+
+The application will be available at [`http://localhost:8080`](http://localhost:8080). Api docs are available at [`http://localhost:3003/api/v1/api-docs`](http://localhost:3003/api/v1/api-docs).
+
+To deploy the project without docker, follow these steps:
+
+1. Build the frontend  
+   ensure the single env variable contains the backend address (e.g. `http://localhost:3003/api/v1`).
+2. Deploy backend
+   Make sure it is available under the address provided to frontend.
+3. Setup a server  
+   point /api to the backend and all else to the frontend build. Redirect non-existing paths to the frontend index.  
+   Example configuration is provided in the [nginx.conf](deployment/nginx.conf) file.
+
 ## Developer documentation
 
 For notes on how to develop, test, and deploy the project, see the [DEVELOPMENT.md](DEVELOPMENT.md) file.
+
+API documentation is provided using Swagger, the documentation is available at `/api/v1/api-docs` in backend.
 
 
 ## Authors 

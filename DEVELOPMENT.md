@@ -36,6 +36,11 @@ Also note that if the mongodb container starts to an unhealthy state, it might h
 - `migration` - migration service, run once to migrate mysql database and seed dummy data
 - `test` - test service, run tests
 
+### Endpoints
+
+- Frontend: http://localhost:8080
+- Backend: http://localhost:3003 (including Swagger docs)
+
 ## Testing
 
 Tests for backend are provided.

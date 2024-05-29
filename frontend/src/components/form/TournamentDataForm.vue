@@ -50,7 +50,7 @@
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-btn icon @click="() => removeRow(item)" tabindex="-1">
-                    <v-icon>mdi-delete</v-icon>
+                    <v-icon color="red">mdi-delete</v-icon>
                 </v-btn>
             </template>
         </v-data-table>
