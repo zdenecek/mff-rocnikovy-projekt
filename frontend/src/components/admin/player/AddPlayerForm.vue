@@ -15,7 +15,7 @@
                     :rules="rules.federationId"></v-text-field>
                 <v-text-field label="Datum narození" type="date" v-model="playerData.birthdate"
                     :rules="rules.birthdate"></v-text-field>
-                <v-btn color="primary" variant="flat" type="submit">Vytvořit</v-btn>
+                <v-btn color="primary" variant="flat" type="submit" title="Vytvořit hráče">Vytvořit</v-btn>
             </v-form>
         </v-col>
     </v-row>

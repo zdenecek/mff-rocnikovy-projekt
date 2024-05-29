@@ -36,6 +36,7 @@ function makeApp() {
 
   const prefix = "/api/v1"
 
+  app.use('/', indexRouter);
   app.use(prefix + '/', indexRouter);
   app.use(prefix + '/users', usersRouter);
   app.use(prefix + '/players', playersRouter);

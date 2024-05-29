@@ -43,8 +43,8 @@
                 select-strategy="page">
                 <template v-slot:bottom v-if="hideFooter"></template>
                 <template v-slot:item.actions="{ item }">
-                    <v-btn @click=" editPlayer(item)"> <v-icon>mdi-account-edit</v-icon></v-btn>
-                    <v-btn color="red" @click="deletePlayer(item)"> <v-icon>mdi-account-remove</v-icon></v-btn>
+                    <v-btn @click=" editPlayer(item)" title="Upravit"> <v-icon>mdi-account-edit</v-icon></v-btn>
+                    <v-btn color="red" @click="deletePlayer(item)" title="Smazat"> <v-icon>mdi-account-remove</v-icon></v-btn>
                 </template>
             </v-data-table>
         </v-col>

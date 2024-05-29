@@ -7,7 +7,7 @@
         <template v-slot:chip="{ item, props }">
             <v-chip v-bind="props" > 
                 <template v-slot:append>
-                    <v-btn @click="model?.splice(model.indexOf(item.raw), 1) "  icon tabindex="-1" size="small" style="text" density="compact">  <v-icon size="small"  >mdi-close</v-icon></v-btn>
+                    <v-btn @click="model?.splice(model.indexOf(item.raw), 1) "  icon tabindex="-1" size="small" style="text" density="compact">  <v-icon size="small" title="Zavřít" >mdi-close</v-icon></v-btn>
                 </template>
                 {{ item.raw.fullName }}  ({{ item.raw.federationId ?? "bez čísla" }}) </v-chip>
         </template>
