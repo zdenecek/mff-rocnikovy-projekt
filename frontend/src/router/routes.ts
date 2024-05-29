@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "home",
         path: "/",
         component: () => import("@/views/HomeView.vue"),
-        beforeEnter: (to, from, next) => {
+        beforeEnter: (_, __, next) => {
           next({ name: "tournaments" });
         }
       },
