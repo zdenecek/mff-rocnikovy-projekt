@@ -14,25 +14,31 @@
     </v-row>
     <v-row v-if="showFilter">
         <v-col class="flex gap-1" lg="8">
-            <v-text-field hide-details="auto" density="compact" label="Jméno" v-model="filter.name" clearable></v-text-field>
+            <v-text-field hide-details="auto" density="compact" label="Jméno" v-model="filter.name"
+                clearable></v-text-field>
             <v-text-field hide-details="auto" density="compact" type="number" hide-spin-buttons label="Číslo hráče"
                 v-model="filter.federationId" clearable></v-text-field>
-            <v-combobox hide-details="auto" density="compact" class="category-filter" v-model="filter.category" :items="categoriesAvailable"
-                chips clearable label="Kategorie" multiple variant="outlined" single-line>
+            <v-combobox hide-details="auto" density="compact" class="category-filter" v-model="filter.category"
+                :items="categoriesAvailable" chips clearable label="Kategorie" multiple variant="outlined" single-line>
             </v-combobox>
         </v-col>
     </v-row>
     <v-row>
         <v-col class="flex spaced">
-            <v-btn @click="showAddPlayerDialog = true" variant="tonal" prepend-icon="mdi-account-plus-outline">Přidat hráče</v-btn>
-            <v-btn :to="{ name: 'admin-import-players' }" variant="tonal" prepend-icon="mdi-account-multiple-plus-outline">Import hráčů</v-btn>
+            <v-btn @click="showAddPlayerDialog = true" variant="tonal" prepend-icon="mdi-account-plus-outline">Přidat
+                hráče</v-btn>
+            <v-btn :to="{ name: 'admin-import-players' }" variant="tonal"
+                prepend-icon="mdi-account-multiple-plus-outline">Import hráčů</v-btn>
             <template v-if="selected.length">
-                <v-btn @click="exportSelected" prepend-icon="mdi-account-arrow-right-outline" variant="tonal">Exportovat vybrané</v-btn>
-                <v-btn @click="deleteSelected" variant="tonal" prepend-icon="mdi-account-multiple-remove-outline">Smazat vybrané</v-btn>
+                <v-btn @click="exportSelected" prepend-icon="mdi-account-arrow-right-outline" variant="tonal">Exportovat
+                    vybrané</v-btn>
+                <v-btn @click="deleteSelected" variant="tonal" prepend-icon="mdi-account-multiple-remove-outline">Smazat
+                    vybrané</v-btn>
                 <v-btn @click="selected = []" prepend-icon="mdi-close">Zrušit výběr ({{ selected.length }})</v-btn>
             </template>
             <template v-else>
-                <v-btn @click="exportAll" variant="tonal" prepend-icon="mdi-account-arrow-right-outline">Exportovat hráče</v-btn>
+                <v-btn @click="exportAll" variant="tonal" prepend-icon="mdi-account-arrow-right-outline">Exportovat
+                    hráče</v-btn>
             </template>
         </v-col>
     </v-row>
@@ -43,8 +49,17 @@
                 select-strategy="page">
                 <template v-slot:bottom v-if="hideFooter"></template>
                 <template v-slot:item.actions="{ item }">
-                    <v-btn @click=" editPlayer(item)" title="Upravit"> <v-icon>mdi-account-edit</v-icon></v-btn>
-                    <v-btn color="red" @click="deletePlayer(item)" title="Smazat"> <v-icon>mdi-account-remove</v-icon></v-btn>
+                    <v-tooltip text="Upravit">
+                        <template v-slot:activator="{ props }">
+                            <v-btn @click=" editPlayer(item)" v-bind="props"> <v-icon>mdi-account-edit</v-icon></v-btn>
+                        </template>
+                    </v-tooltip>
+                    <v-tooltip text="Smazat">
+                        <template v-slot:activator="{ props }">
+                            <v-btn color="red" @click="deletePlayer(item)" v-bind="props">
+                                <v-icon>mdi-account-remove</v-icon></v-btn>
+                        </template>
+                    </v-tooltip>
                 </template>
             </v-data-table>
         </v-col>
@@ -132,8 +147,8 @@ function deletePlayer(player: Player) {
             try {
                 await playerStore.deletePlayer(player)
                 infoToast("Hráč byl smazán")
-            } catch (e:any) {
-                errorToast("Chyba při mazání hráče:" + e.message )
+            } catch (e: any) {
+                errorToast("Chyba při mazání hráče:" + e.message)
             }
         }
     })
@@ -159,16 +174,16 @@ function exportSelected() {
 }
 
 function deleteSelected() {
-    const toDelete =selectedPlayers.value;
+    const toDelete = selectedPlayers.value;
     confirm.value?.show({
-        
-        text: `Opravdu si přejete smazat následujících ${toDelete.length} hráčů?<br><br>` + toDelete.map(p => p.fullName).join("<br>") ,
+
+        text: `Opravdu si přejete smazat následujících ${toDelete.length} hráčů?<br><br>` + toDelete.map(p => p.fullName).join("<br>"),
         onConfirm: async () => {
             try {
                 await playerStore.deletePlayers(toDelete)
                 infoToast("Hráči byli smazáni")
-            } catch (e:any) {
-                errorToast("Chyba při mazání hráčů:" + e.message )
+            } catch (e: any) {
+                errorToast("Chyba při mazání hráčů:" + e.message)
             }
         }
     })

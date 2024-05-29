@@ -52,6 +52,10 @@ To run the project locally, use docker compose.
 docker compose up -d
 ```
 
+> [!NOTE]  
+> The docker compose local deployment is meant for development and testing purposes, it can be somewhat slow and is not optimized for production use.
+
+
 The application will be available at [`http://localhost:8080`](http://localhost:8080). Api docs are available at [`http://localhost:3003/api/v1/api-docs`](http://localhost:3003/api/v1/api-docs).
 
 To deploy the project without docker, follow these steps:
