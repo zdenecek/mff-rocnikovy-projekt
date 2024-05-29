@@ -11,7 +11,7 @@ const mongoose = require('../src/mongoose');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await mongoose.init();
-    if (await User.find({ email: 'admin' })) {
+    if (await User.findOne({ email: 'admin' })) {
       return;
     }
     await registerUser('admin', 'admin', 'admin', 'admin', 'admin');

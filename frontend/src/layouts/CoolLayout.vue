@@ -49,7 +49,7 @@
                                     </v-btn>
                                 </v-col>
                             </v-row>
-                            <v-row v-if="subNav">
+                            <v-row v-if="subNav && false">
                                 <v-col cols="9" class="subnav flex">
                                     <router-link :to="item.to" v-for="item in subNav">
                                         {{ item.text }}
@@ -97,12 +97,12 @@ const topNavButtons = [
     {
         name: 'players', text: 'Hráči'
     },
-    {
-        name: 'series', text: 'Série'
-    },
-    {
-        name: 'admin', text: 'Admin'
-    }
+    // {
+    //     name: 'series', text: 'Série'
+    // },
+    // {
+    //     name: 'admin', text: 'Admin'
+    // }
 ]
 
 const route = useRoute();

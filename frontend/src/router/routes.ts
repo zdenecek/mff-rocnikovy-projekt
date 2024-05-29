@@ -11,8 +11,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: "home",
         path: "/",
-
         component: () => import("@/views/HomeView.vue"),
+        beforeEnter: (to, from, next) => {
+          next({ name: "tournaments" });
+        }
       },
       {
         name: "privacy-policy",
@@ -20,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           pageName: 'privacy-policy'
         },
-        component: () => import("@/views/PageView.vue"),
+        component: () => import("@/views/PrivacyPolicyView.vue"),
       },
       {
         path: "/turnaje",

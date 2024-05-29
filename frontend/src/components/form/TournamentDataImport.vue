@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 
-import { ref, defineEmits, defineExpose, computed } from 'vue';
+import { ref, computed } from 'vue';
 import CsvImport from '@/components/CsvImport.vue';
 import DialogModal from '@/components/DialogModal.vue';
 import { usePlayerStore } from '@/stores/playerStore';

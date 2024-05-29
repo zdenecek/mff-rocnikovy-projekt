@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
     },
     group: ['Tournament.id']
   });
-  return res.json(tournaments).send();
+  return res.json(tournaments);
 });
 
 // Get one tournament

@@ -82,7 +82,7 @@ export class Tournament {
   }
 
   get slug(): string {
-    return makeSlug(this.title);
+    return makeSlug(this.title ?? "");
   }
 
   toJSON(): any {
