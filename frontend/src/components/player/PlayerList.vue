@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { PlayerCategory } from '@/model/PlayerCategory';
-import { useAuthStore } from '@/stores/authStore';
 import { usePlayerStore } from '@/stores/playerStore';
 import { computed, ref } from 'vue';
 
@@ -75,7 +74,7 @@ const playersFiltered = computed(() => {
     return players.value.filter(p =>
         (!f.name || p.fullName.toLowerCase().includes(f.name.toLowerCase())) &&
         (!f.category.length || (p.category && f.category.includes(p.category))) &&
-        (!f.federationId || p.federationId === f.federationId || p.federationId.toString().includes(f.federationId.toString()))
+        (!f.federationId || p.federationId === f.federationId || p.federationId?.toString().includes(f.federationId.toString()))
     )
 });
 

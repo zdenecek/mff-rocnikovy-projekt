@@ -1,4 +1,4 @@
-import { Player } from '@/models/Player';
+import { Player } from '@/model/Player';
 
 export class LocalPlayerExporter {
     static async exportPlayers(players: Player[]) {

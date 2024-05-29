@@ -56,7 +56,7 @@ import _ from 'lodash';
 
 import { useTournamentStore } from '@/stores/tournamentStore';
 import { Result, Tournament } from '@/model/Tournament';
-import { errorToast } from '@/toasts';
+
 
 import TournamentTypeSelect from '@/components/form/TournamentTypeSelect.vue';
 import DateField from '@/components/form/DateField.vue';

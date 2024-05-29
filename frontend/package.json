@@ -12,6 +12,7 @@
     "@mdi/font": "^7.4.47",
     "@types/lodash": "^4.17.0",
     "@types/papaparse": "^5.3.14",
+    "@types/toastify-js": "^1.12.3",
     "axios": "^1.6.2",
     "lodash": "^4.17.21",
     "papaparse": "^5.4.1",

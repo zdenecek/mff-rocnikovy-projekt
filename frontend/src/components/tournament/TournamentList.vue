@@ -6,7 +6,7 @@
     </v-row>
     <v-row>
         <v-col>
-            <v-data-table :headers="headers" :items="tournaments" item-key="id" :loading="loading">
+            <v-data-table :headers="headers" :items="tournaments as Tournament[]" item-key="id" :loading="loading">
                 <template v-slot:item.title="{ item }">
                     <td>
                         <router-link :to="{ name: 'tournament', params: { id: item.id, slug: item.slug } }">
@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { useTournamentStore } from '@/stores/tournamentStore';
 import { computed } from 'vue';
+import {Tournament} from "@/model/Tournament.ts";
 
 const headers = [
     { title: 'Turnaj', value: 'title', width: '35%' },
