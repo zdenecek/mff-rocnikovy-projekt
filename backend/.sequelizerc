@@ -1,5 +1,5 @@
 module.exports = {
-  'config': 'config/sql.json',
+  'config': 'config/sql.js',
   'migrations-path': 'migrations/',
   'seeders-path': 'seeders/'
 }
