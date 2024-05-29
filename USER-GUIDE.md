@@ -10,12 +10,8 @@ First things first, let's talk about logging in. Imagine your username and passw
 
 Ah, the dashboard, the heart of our web application. It's like the cockpit of a spaceship, only less complicated and without the risk of crashing into an asteroid. Here, you'll find various buttons, menus, and icons that probably mean something important. Feel free to click around and explore—just remember, unlike in real life, there's always a back button if you get lost. And if you see a button labeled "Do Not Press," well, you know what to do.
 
-## Paragraph 3: Customizing Your Profile
-
-Customizing your profile is like decorating your room but with fewer trips to IKEA. Add a profile picture that captures your essence—whether that's a professional headshot or a picture of your cat dressed as a pirate is entirely up to you. Fill out your bio with witty, intriguing, or completely fabricated information. Just remember, honesty is the best policy, unless you're a secret agent, in which case, fabricate away!
-
-## Paragraph 4: Accessing Features
+## Paragraph 3: Accessing Features
 
 Our web application is chock-full of features that are sure to make your life easier—or at least give you something to do during those boring meetings. From managing tasks to collaborating with others, the possibilities are endless (or at least a few). Click on the icons that seem most appealing, and see where they take you. If something doesn't work as expected, just remember: it's not a bug, it's a feature.
 
-And there you have it, dear user—a hilariously general guide to navigating our web application. We hope you enjoyed the ride and maybe even learned something along the way. Now go forth and explore, and remember: if all else fails, there's always tech support (or just turning it off and on again).
+And there you have it, dear user—a general guide to navigating our web application. We hope you enjoyed the ride and maybe even learned something along the way. Now go forth and explore, and remember: if all else fails, there's always tech support (or just turning it off and on again).
