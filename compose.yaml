@@ -73,7 +73,7 @@ services:
       mysql:
         condition: service_healthy
     restart: no
-    command: sh -c "npm run db-clean && npm run migrate && npm run seed""
+    command: sh -c "npm run db-clean && npm run migrate && npm run seed"
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
