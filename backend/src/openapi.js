@@ -15,7 +15,7 @@ const options = {
 
 function init(app) {
   const openapiSpecification = swaggerJsdoc(options);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+  app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 }
 
 module.exports = { init }; 

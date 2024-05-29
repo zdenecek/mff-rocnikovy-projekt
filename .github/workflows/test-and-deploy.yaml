@@ -131,7 +131,7 @@ jobs:
                 pm2 restart ${{ env.deployment_name }}
             else
                 echo "Starting new PM2 process"
-                pm2 start index.js --name ${{ env.deployment_name }} --log /var/log/matrikabs/${{ env.deployment_name }}/backend-pm2.log
+                pm2 start bin/www --name ${{ env.deployment_name }} --log /var/log/matrikabs/${{ env.deployment_name }}/backend-pm2.log
                 pm2 save
             fi
 
