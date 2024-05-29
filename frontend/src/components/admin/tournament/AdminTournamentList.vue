@@ -15,14 +15,14 @@
     </v-col>
     <v-col lg="3">
       <v-combobox density="compact" class="category-filter" hide-details="auto" v-model="filter.type"
-                  :items="TournamentTypes" item-value="value" :return-object="false"
-                  chips clearable label="Kategorie" multiple variant="outlined" single-line>
+        :items="TournamentTypes" item-value="value" :return-object="false" chips clearable label="Kategorie" multiple
+        variant="outlined" single-line>
       </v-combobox>
     </v-col>
   </v-row>
   <v-row>
     <v-col class="flex spaced">
-      <v-btn variant="tonal" prepend-icon="mdi-plus-circle-outline" :to="{name: 'admin-add-tournament'}">Přidat turnaj
+      <v-btn variant="tonal" prepend-icon="mdi-plus-circle-outline" :to="{ name: 'admin-add-tournament' }">Přidat turnaj
       </v-btn>
       <template v-if="selected.length">
         <v-btn @click="deleteSelected" variant="tonal" prepend-icon="mdi-trash-can-outline">Smazat vybrané</v-btn>
@@ -35,7 +35,7 @@
   <v-row>
     <v-col>
       <v-data-table :headers="headers" :items="tournamentsFiltered as Tournament[]" item-key="id" :loading="loading"
-                    v-model="selected" show-select>
+        v-model="selected" show-select>
         <template v-slot:item.title="{ item }">
           <td>
             <router-link :to="{ name: 'tournament', params: { id: item.id, slug: item.slug } }">
@@ -44,14 +44,22 @@
           </td>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn :to="{name:'admin-edit-tournament', params: { id: item.id}}">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn color="red" @click="deleteTournament(item)">
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
+          <v-tooltip text="Upravit">
+            <template v-slot:activator="{ props }">
+              <v-btn :to="{ name: 'admin-edit-tournament', params: { id: item.id } }" v-bind="props">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <v-tooltip text="Smazat">
+            <template v-slot:activator="{ props }">
+              <v-btn color="red" @click="deleteTournament(item)" v-bind="props">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
         </template>
-        <template v-slot:item.type="{item}">
+        <template v-slot:item.type="{ item }">
           <v-icon v-if="item.type === 'team'" title="Týmy" color="primary">mdi-alpha-t-box-outline</v-icon>
           <v-icon v-else-if="item.type === 'pair'" title="Páry" color="secondary">mdi-alpha-p-box-outline</v-icon>
           <v-icon v-else="item.type === 'individual'" title="Individuál" color="green">mdi-alpha-i-box-outline</v-icon>
@@ -59,24 +67,24 @@
       </v-data-table>
     </v-col>
   </v-row>
-  <confirm-dialog ref="confirm"/>
+  <confirm-dialog ref="confirm" />
 </template>
 
 <script setup lang="ts">
-import {Tournament, TournamentType, TournamentTypes} from '@/model/Tournament';
-import {useTournamentStore} from '@/stores/tournamentStore';
-import {computed, ref} from 'vue';
+import { Tournament, TournamentType, TournamentTypes } from '@/model/Tournament';
+import { useTournamentStore } from '@/stores/tournamentStore';
+import { computed, ref } from 'vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
-import {errorToast, infoToast} from '@/toasts';
+import { errorToast, infoToast } from '@/toasts';
 
 
 const headers = [
-  {title: 'Název', value: 'title', sortable: true},
-  {title: 'Typ', value: 'type', sortable: true},
-  {title: 'Datum', value: 'dateString', sortable: true},
-  {title: 'úč.', value: 'resultsCount', sortable: true},
-  {title: 'Místo', value: 'place', sortable: true},
-  {title: '', key: 'actions'},
+  { title: 'Název', value: 'title', sortable: true },
+  { title: 'Typ', value: 'type', sortable: true },
+  { title: 'Datum', value: 'dateString', sortable: true },
+  { title: 'úč.', value: 'resultsCount', sortable: true },
+  { title: 'Místo', value: 'place', sortable: true },
+  { title: '', key: 'actions' },
 ]
 
 const confirm = ref(null as null | typeof ConfirmDialog);
@@ -85,8 +93,8 @@ const loading = computed(() => tournamentStore.loading);
 const tournaments = computed(() => tournamentStore.tournaments);
 const selected = ref([] as number[])
 const selectedTournaments = computed(() =>
-    selected.value.map(id =>
-        tournaments.value.find((t: Tournament) => t.id === id)))
+  selected.value.map(id =>
+    tournaments.value.find((t: Tournament) => t.id === id)))
 
 
 const showFilter = ref(false);
@@ -110,8 +118,8 @@ function resetFilter() {
 const tournamentsFiltered = computed(() => {
   const f = filter.value;
   return tournaments.value.filter((t: Tournament) =>
-      (!f.type.length || f.type.includes(t.type))
-      && (!f.title || t.title.toLowerCase().includes(f.title.toLowerCase()))
+    (!f.type.length || f.type.includes(t.type))
+    && (!f.title || t.title.toLowerCase().includes(f.title.toLowerCase()))
   )
 });
 
