@@ -134,7 +134,6 @@ const user = computed(() => authStore.user);
         background-color: white;
         min-height: 100%;
         /* TODO: breakpoints */
-
     }
 }
 
@@ -265,5 +264,17 @@ const user = computed(() => authStore.user);
 </style>
 
 <style lang="scss">
-@import "@/styles/coolLayout.scss";
+@use "@/styles/colors.scss" as *;
+
+h2 {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    color: $primary;
+}
+
+th {
+    font-size: 1.2em;
+    color: $primary;
+    text-transform: uppercase;
+}
 </style>
